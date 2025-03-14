@@ -15,10 +15,10 @@ export const usersTable = sqliteTable('user', {
 });
 export const ticketTable = sqliteTable('ticket',{
 	id: integer('ID').primaryKey(),
-	category: text('category').notNull(),
 	uid: integer('user_id').notNull(),
 	status: text('status').default('waiting').notNull(),
 	createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`).notNull(),
 	title: text('title').notNull(),
+	category: text('category').notNull(),
 	msg: text('message'),
 })
