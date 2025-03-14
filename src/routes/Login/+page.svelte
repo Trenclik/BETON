@@ -1,19 +1,25 @@
 <script lang="ts">
-    
+    import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
 </script>
 
-
 <main>
-    <div class="windowForLogin">
-        <h1>Přihlášení</h1>
-        <div class="inputsValue">
-            <input type="text" placeholder="Jméno nebo Email">
-            <input type="password" placeholder="Heslo">
-            <input type="submit" value="Přihlásit se">
-            <a href="./AnotherWayToLogin"><button class="AnotherWayToLogin">Přihlásit se jinak</button></a>
+    <section class="TitleConcretum">
+        <h1>Concretum</h1>
+    </section>
+
+    <section class="LoginContainer">
+        <div class="LoginSection">
+            <input type="text" placeholder="Username">
+            <ShowHideButton></ShowHideButton>
+            <a href="./ForgetPassword">Forgot Password</a>
+            <button id="LoginButton">Login</button>
         </div>
-        <!--<a href="./ForgetPassword">Zapomenuté heslo?</a>-->
-    </div>
+
+        <div class="DontHaveAccount">
+            <p>Don't have an account?</p>
+            <a href="./Register">Sign Up</a>
+        </div>
+    </section>
 </main>
 
 <style>
