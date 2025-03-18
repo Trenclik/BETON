@@ -19,8 +19,8 @@
         <svg
           version="1.0"
           xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
+          width="20"
+          height="20"
           viewBox="0 0 512.000000 512.000000"
           preserveAspectRatio="xMidYMid meet"
         >
@@ -57,8 +57,8 @@
         <svg
           version="1.0"
           xmlns="http://www.w3.org/2000/svg"
-          width="32"
-          height="32"
+          width="20"
+          height="20"
           viewBox="0 0 512.000000 512.000000"
           preserveAspectRatio="xMidYMid meet"
         >
@@ -113,18 +113,27 @@
     width: fit-content;
   }
 
-  input[type="password"]::placeholder {
-    text-align: center;
-    align-items: center;
+  input[type="password"],
+  input[type="text"] {
+    height: 30px;
+    padding: 8px;
+    padding-right: 50px; /* Rezerva na ikonu oka */
+    border-radius: 8px;
+    border: none;
     font-size: 18px;
+    background: #ffffff;
+    color: #000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    max-width: 250px; /* Maximální šířka vstupního pole */
+    white-space: nowrap;
+    overflow: hidden;
   }
-  input{
-    background-color: rgba(255, 255, 255, 1);
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    height: 40px;
-    width: 210px;
-    margin: 0;
+
+  input[type="password"]::placeholder,
+  input[type="text"]::placeholder {
+    text-align: center;
+    font-size: 18px;
+    margin-right: -40px;
   }
 
   .show-hide-password {
@@ -133,12 +142,22 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    width: 43;
-    height: 33;
+    width: 43px;
+    height: 33px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: color 0.3s ease; /* Animace změny barvy */
+    transition: color 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    input[type="password"],
+    input[type="text"] {
+      max-width: 100%;
+    }
+    .password-container, input {
+      width: 100%;
+    }
   }
 </style>
