@@ -27,7 +27,6 @@
 
 
 
-
 <main>
     {@render children()}
 </main>
