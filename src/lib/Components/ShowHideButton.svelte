@@ -1,6 +1,10 @@
 <script lang="ts">
-  // Svelte 5 - správná deklarace stavu
-  let { class: customClass, value = "" } = $props<{ class?: string, value?: string }>();
+  // Umožníme bindowání hodnoty
+  let { class: customClass, value = $bindable(""), name = "" } = $props<{
+    class?: string;
+    value?: string;
+    name?: string;
+  }>();
 
   const State = $state({ showPassword: false });
 
@@ -9,13 +13,12 @@
   function togglePassword() {
     State.showPassword = !State.showPassword;
   }
-
-  let password = $state("");
 </script>
 
 <main>
   <div class="password-container">
-    <input class="PaswwordInput {customClass}" {type} placeholder="Password" />
+    <input class="PasswordInput {customClass}" {type} placeholder="{name === 'confirm' ? 'Confirm Password' : 'Password'}"
+    bind:value />
     <button class="show-hide-password" onclick={togglePassword}>
       {#if State.showPassword}
         <!-- SVG pro view.svg -->
@@ -143,7 +146,7 @@
 
   .show-hide-password {
     position: absolute;
-    right: 10px;
+    right: 5px;
     background: transparent;
     border: none;
     cursor: pointer;
