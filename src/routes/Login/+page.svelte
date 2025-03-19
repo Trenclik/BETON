@@ -10,7 +10,6 @@
     showErrors = true; 
     if (!username.trim()) return; 
 
-    alert("Přihlášení úspěšné!"); 
   }
 </script>
 
@@ -19,12 +18,7 @@
 <main>
   <div class="login-section">
     <div class="inputs">
-      <input 
-        class="username" 
-        type="text" 
-        placeholder="Username" 
-        bind:value={username} 
-      />
+      <input class="username" type="text" placeholder="Username" bind:value={username}/>
       {#if errorMessage}
         <p class="error-message">{errorMessage}</p>
       {/if}
