@@ -2,15 +2,15 @@
   import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
   import StylingPage from "$lib/Components/Styling-page.svelte";
 
-  let Username = $state("");
-  let errorMessage = $state("");
+  let username = $state("");  
+  let showErrors = $state(false);
+  let errorMessage = $derived.by(() => (showErrors && !username.trim() ? "Toto pole musí být vyplněno" : ""));
 
-  function validate() {
-    if (Username === "") {
-      errorMessage = "Toto pole musí být vyplněno";
-    } else {
-      errorMessage = "";
-    }
+  function handleLogin() {
+    showErrors = true; 
+    if (!username.trim()) return; 
+
+    alert("Přihlášení úspěšné!"); 
   }
 </script>
 
@@ -19,7 +19,12 @@
 <main>
   <div class="login-section">
     <div class="inputs">
-      <input class="username" type="text" placeholder="Username" bind:value={Username} onblur={validate}/>
+      <input 
+        class="username" 
+        type="text" 
+        placeholder="Username" 
+        bind:value={username} 
+      />
       {#if errorMessage}
         <p class="error-message">{errorMessage}</p>
       {/if}
@@ -28,14 +33,13 @@
     <div class="Forgot-Password">
       <a class="forgot-pass" href="./ForgetPassword">Forgot Password</a>
     </div>
-    <button class="login-button">Login</button>
+    <button class="login-button" onclick={handleLogin}>Login</button>
     <div class="register-section">
       <p>Don't have an account?</p>
       <a class="register" href="./Register">Sign Up</a>
     </div>
   </div>
 </main>
-
 <style>
   main {
     display: flex;
@@ -64,6 +68,8 @@
     color: red;
     font-size: 14px;
     margin-top: -10px;
+    margin-bottom: -8px;
+
   }
 
   input {

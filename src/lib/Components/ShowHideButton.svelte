@@ -1,20 +1,23 @@
 <script lang="ts">
-  let { class: customClass } = $props<{ class?: string }>();
+  // Svelte 5 - správná deklarace stavu
+  let { class: customClass, value = "" } = $props<{ class?: string, value?: string }>();
 
-  const state = $state({ showPassword: false });
+  const State = $state({ showPassword: false });
 
-  const type = $derived.by(() => (state.showPassword ? "text" : "password"));
+  const type = $derived.by(() => (State.showPassword ? "text" : "password"));
 
   function togglePassword() {
-    state.showPassword = !state.showPassword;
+    State.showPassword = !State.showPassword;
   }
+
+  let password = $state("");
 </script>
 
 <main>
   <div class="password-container">
     <input class="PaswwordInput {customClass}" {type} placeholder="Password" />
     <button class="show-hide-password" onclick={togglePassword}>
-      {#if state.showPassword}
+      {#if State.showPassword}
         <!-- SVG pro view.svg -->
         <svg
           version="1.0"
