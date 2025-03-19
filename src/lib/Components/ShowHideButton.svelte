@@ -127,6 +127,8 @@
     max-width: 250px; /* Maximální šířka vstupního pole */
     white-space: nowrap;
     overflow: hidden;
+    width: 80%;
+
   }
 
   input[type="password"]::placeholder,
