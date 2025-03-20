@@ -7,10 +7,12 @@
   let username = $state("");
   let email = $state("");
   let showErrors = $state(false);
+  let submitted = $state(false); // Stav pro odeslání formuláře
 
   let usernameError = $derived.by(() =>
     showErrors && !username.trim() ? "Toto pole musí být vyplněno" : ""
   );
+
   let emailError = $derived.by(() => {
     if (!showErrors) return "";
     if (!email.trim()) return "Email je povinný!";
@@ -21,8 +23,9 @@
   });
 
   function handleLogin() {
-    showErrors = true;
-    if (!username.trim() && !email.trim()) return;
+    showErrors = true; // Teď se zobrazí chybové zprávy
+    submitted = true; // Nastavíme, že formulář byl odeslán
+    if (!username.trim() || !email.trim()) return;
   }
 </script>
 
@@ -40,8 +43,8 @@
         <p class="error-message">{emailError}</p>
       {/if}
 
-      <ShowHideButton bind:value={password} name="password" />
-      <ShowHideButton bind:value={confirmPassword} name="confirm" />
+      <ShowHideButton bind:value={password} bind:submitted={submitted} name="password" />
+      <ShowHideButton bind:value={confirmPassword} bind:submitted={submitted} name="confirm" />
 
       {#if password && confirmPassword && password !== confirmPassword}
         <p class="error-message">Hesla se neshodují!</p>
@@ -49,7 +52,7 @@
 
       <div class="checkingForAgreement">
         <input type="checkbox" id="souhlas" name="souhlas" />
-        <label for="souhlas">Souhlas s podmínkami</label>
+        <label for="souhlas">Souhlas s <strong>podmínkami</strong></label>
       </div>
     </div>
     <button class="register-button" onclick={handleLogin}>Registrovat se</button
@@ -105,6 +108,27 @@
   }
 
   .checkingForAgreement {
+    margin-left: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white; /* Barva běžného textu */
+  }
+
+  .checkingForAgreement input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: green; /* Barva checkboxu */
+  }
+
+  .checkingForAgreement label {
+    color: white;
+  }
+
+  .checkingForAgreement label strong {
+    color: green; /* Zelená barva pro důležitou část textu */
+  }
+
+  .checkingForAgreement {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -134,6 +158,10 @@
   @media (max-width: 500px) {
     .register-section {
       width: 90%;
+    }
+
+    .checkingForAgreement {
+      margin-left: 55px;
     }
     input {
       font-size: 16px;

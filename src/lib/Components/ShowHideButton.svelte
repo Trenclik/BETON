@@ -1,9 +1,14 @@
 <script lang="ts">
-  // Umožníme bindowání hodnoty
-  let { class: customClass, value = $bindable(""), name = "" } = $props<{
+  let {
+    class: customClass,
+    value = $bindable(""),
+    name = "",
+    submitted = $bindable(false), // OPRAVA - nyní je bindable!
+  } = $props<{
     class?: string;
     value?: string;
     name?: string;
+    submitted?: boolean;
   }>();
 
   const State = $state({ showPassword: false });
@@ -13,12 +18,24 @@
   function togglePassword() {
     State.showPassword = !State.showPassword;
   }
+
+  let password = $state("");
+
+  let passwordError = $derived.by(() => {
+    return submitted && password.length < 12
+      ? "Heslo musí mít alespoň 12 znaků"
+      : "";
+  });
 </script>
 
 <main>
   <div class="password-container">
-    <input class="PasswordInput {customClass}" {type} placeholder="{name === 'confirm' ? 'Confirm Password' : 'Password'}"
-    bind:value />
+    <input
+      class="PasswordInput {customClass}"
+      {type}
+      placeholder={name === "confirm" ? "Confirm Password" : "Password"}
+      bind:value={password}
+    />
     <button class="show-hide-password" onclick={togglePassword}>
       {#if State.showPassword}
         <!-- SVG pro view.svg -->
@@ -109,6 +126,9 @@
       {/if}
     </button>
   </div>
+  {#if passwordError}
+    <p class="error-message">{passwordError}</p>
+  {/if}
 </main>
 
 <style>
@@ -117,6 +137,13 @@
     display: flex;
     align-items: center;
     width: fit-content;
+  }
+
+  .error-message {
+    color: red; /* Nastaví text chybové zprávy na červenou */
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 0;
   }
 
   input[type="password"],
@@ -134,7 +161,6 @@
     white-space: nowrap;
     overflow: hidden;
     width: 80%;
-
   }
 
   input[type="password"]::placeholder,
@@ -164,7 +190,8 @@
     input[type="text"] {
       max-width: 100%;
     }
-    .password-container, input {
+    .password-container,
+    input {
       width: 100%;
     }
   }
