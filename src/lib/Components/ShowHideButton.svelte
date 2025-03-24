@@ -33,7 +33,7 @@
     <input
       class="PasswordInput {customClass}"
       {type}
-      placeholder={name === "confirm" ? "Confirm Password" : "Password"}
+      placeholder={name === "confirm" ? "Potvrzení hesla" : "Heslo"}
       bind:value={password}
     />
     <button class="show-hide-password" onclick={togglePassword}>

@@ -33,7 +33,7 @@
 <main>
   <div class="register-section">
     <div class="inputs">
-      <input type="text" placeholder="Username" bind:value={username} />
+      <input type="text" placeholder="Uživatelské jméno" bind:value={username} />
       {#if usernameError}
         <p class="error-message">{usernameError}</p>
       {/if}
