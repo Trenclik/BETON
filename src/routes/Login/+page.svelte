@@ -18,19 +18,19 @@
 <main>
   <div class="login-section">
     <div class="inputs">
-      <input class="username" type="text" placeholder="Username" bind:value={username}/>
+      <input class="username" type="text" placeholder="Uživatelské jméno" bind:value={username}/>
       {#if errorMessage}
         <p class="error-message">{errorMessage}</p>
       {/if}
       <ShowHideButton />
     </div>
     <div class="Forgot-Password">
-      <a class="forgot-pass" href="./ForgetPassword">Forgot Password</a>
+      <a class="forgot-pass" href="./ForgetPassword">Zapomenuté heslo</a>
     </div>
-    <button class="login-button" onclick={handleLogin}>Login</button>
+    <button class="login-button" onclick={handleLogin}>Přihlásit se</button>
     <div class="register-section">
-      <p>Don't have an account?</p>
-      <a class="register" href="./Register">Sign Up</a>
+      <p>Nemáte účet?</p>
+      <a class="register" href="./Register">Zaregistrovat se</a>
     </div>
   </div>
 </main>
@@ -55,7 +55,7 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-top: 0;
+    margin-top: 125px;
   }
 
   .error-message {
