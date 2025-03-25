@@ -56,5 +56,6 @@
         font-size: 18px;
         border: none;
         border-radius: 5px;
+        cursor: pointer;
     }
 </style>
