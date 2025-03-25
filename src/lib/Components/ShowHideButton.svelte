@@ -1,9 +1,9 @@
 <script lang="ts">
   let {
     class: customClass,
-    value = $bindable(""),
+    value = $bindable(""), // PŘÍMÉ PROPOJENÍ S FORMULÁŘEM!
     name = "",
-    submitted = $bindable(false), // OPRAVA - nyní je bindable!
+    submitted = $bindable(false),
   } = $props<{
     class?: string;
     value?: string;
@@ -19,10 +19,8 @@
     State.showPassword = !State.showPassword;
   }
 
-  let password = $state("");
-
   let passwordError = $derived.by(() => {
-    return submitted && password.length < 12
+    return submitted && value.length < 12
       ? "Heslo musí mít alespoň 12 znaků"
       : "";
   });
@@ -31,11 +29,10 @@
 <main>
   <div class="password-container">
     <input
-      class="PasswordInput {customClass}"
-      {type}
-      placeholder={name === "confirm" ? "Potvrzení hesla" : "Heslo"}
-      bind:value={password}
-    />
+    class="PasswordInput {customClass}"
+    {type}
+    placeholder={name === "confirm" ? "Potvrzení hesla" : "Heslo"}
+    bind:value={value}/>
     <button class="show-hide-password" onclick={togglePassword}>
       {#if State.showPassword}
         <!-- SVG pro view.svg -->
