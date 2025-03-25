@@ -1,23 +1,24 @@
 <script lang="ts">
-  import StylingPage from "$lib/Components/Styling-page.svelte";
+    import StylingPage from "$lib/Components/Styling-page.svelte";
+
 </script>
 
 <StylingPage />
 
 <main>
-  <div class="NewPasswordContainer">
+  <div class="SuccessfulSection">
     <div class="Text">
-      <h1>Resetování hesla</h1>
-      <p>Zadejte svou emailovou adresu</p>
+      <h1>Uspěsný !</h1>
+      <p>Váš účet byl vytvořen</p>
     </div>
-
-    <input type="Email" placeholder="Email" />
+    <img class="Succesful" src="./Succesful.svg" alt="" />
     <button>Pokračovat</button>
   </div>
 </main>
 
+
 <style>
-    .NewPasswordContainer {
+    .SuccessfulSection {
         text-align: center;
         color: white;
         display: flex;
@@ -30,6 +31,12 @@
     .Text {
         margin-bottom: 6px;
     }
+
+    .Succesful{
+        width: 125px;
+        height: 200px;
+        margin-bottom: 20px;
+    }
     
     h1 {
         font-size: 24px;
@@ -39,19 +46,6 @@
     p {
         font-size: 20px;
         margin-bottom: 20px;
-    }
-    
-    input {
-        width: 278px;
-        height: 40px;
-        font-size: 18px;
-        border: none;
-        border-radius: 8px;
-        margin-bottom: 170px;
-    }
-
-    input::placeholder {
-        text-align: center;
     }
     
     button {
