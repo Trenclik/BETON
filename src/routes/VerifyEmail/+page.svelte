@@ -31,10 +31,13 @@
 
 <main>
   <div class="VerifyContainer">
-    <h1>Ověřovací kód</h1>
-    <p>Prosím zadejte ověřovací kód,<br /> 
-        který jsme vám poslali na email</p>
-
+    <div class="Text">
+      <h1>Ověřovací kód</h1>
+      <p>
+        Prosím zadejte ověřovací kód,<br />
+        který jsme vám poslali na email
+      </p>
+    </div>
     <div class="code-inputs">
       {#each code as digit, i}
         <input
@@ -49,7 +52,7 @@
         />
       {/each}
     </div>
-    <a href="#"><strong>Poslat kód znovu</strong></a>
+    <a href="/"><strong>Poslat kód znovu</strong></a>
     <button>Ověrit</button>
   </div>
 </main>
@@ -62,42 +65,58 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 500px;
+    height: 650px;
+  }
+
+  .Text {
+    margin-bottom: 20px; /* Větší mezera mezi textem a inputy */
   }
 
   h1 {
     font-size: 24px;
-    margin: 0;
+    margin-bottom: 10px;
   }
 
-  p{
+  p {
     font-size: 20px;
-  }
-
-  a{
-    color: #1E8A25;
-  }
-
-  button{
-    background: #1E8A25;
-    color: white;
-    width: 200px;
-    height: 30px;
+    margin-bottom: 20px;
   }
 
   .code-inputs {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 15px; /* Větší mezery mezi inputy */
+    margin-bottom: 20px; /* Větší mezera mezi inputy a odkazem */
   }
 
   .code-inputs input {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     font-size: 24px;
     text-align: center;
     border: none;
     border-radius: 5px;
     outline: none;
+  }
+
+  a {
+    color: #1e8a25;
+    margin-bottom: 20px; /* Přidána mezera mezi odkazem a tlačítkem */
+    display: inline-block;
+  }
+
+  button {
+    background: #1e8a25;
+    color: white;
+    width: 200px;
+    height: 40px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #16661c;
   }
 </style>
