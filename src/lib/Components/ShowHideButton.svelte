@@ -59,7 +59,8 @@
     border: none;
     cursor: pointer;
     position: absolute;
-    right: -13px;
+    right: 30px;
+    top: 1px;
     transform: translateY(-50%);
   }
   svg {
