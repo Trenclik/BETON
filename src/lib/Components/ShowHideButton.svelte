@@ -1,195 +1,82 @@
 <script lang="ts">
-  let {
-    class: customClass,
-    value = $bindable(""), // PŘÍMÉ PROPOJENÍ S FORMULÁŘEM!
-    name = "",
-    submitted = $bindable(false),
-  } = $props<{
-    class?: string;
-    value?: string;
-    name?: string;
-    submitted?: boolean;
-  }>();
-
-  const State = $state({ showPassword: false });
-
-  const type = $derived.by(() => (State.showPassword ? "text" : "password"));
-
-  function togglePassword() {
-    State.showPassword = !State.showPassword;
-  }
-
-  let passwordError = $derived.by(() => {
-    return submitted && value.length < 12
-      ? "Heslo musí mít alespoň 12 znaků"
-      : "";
-  });
+  export let visible: boolean;
 </script>
 
-<main>
-  <div class="password-container">
-    <input
-    class="PasswordInput {customClass}"
-    {type}
-    placeholder={name === "confirm" ? "Potvrzení hesla" : "Heslo"}
-    bind:value={value}/>
-    <button class="show-hide-password" onclick={togglePassword}>
-      {#if State.showPassword}
-        <!-- SVG pro view.svg -->
+<main {...$$props}>
+  <!-- Zde umožňujeme šíření atributů -->
+  <div class="show-hide-icon">
+    <button type="button" class="toggle" onclick={() => (visible = !visible)}>
+      {#if visible}
+        <!-- Oko otevřené -->
         <svg
           version="1.0"
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
+          width="512.000000pt"
+          height="512.000000pt"
           viewBox="0 0 512.000000 512.000000"
           preserveAspectRatio="xMidYMid meet"
         >
           <g
-            transform="translate(0,512) scale(0.1,-0.1)"
-            fill="rgba(30, 138, 37, 1)"
-            stroke="currentColor"
-            stroke-width="30"
+            transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+            fill="#1E8A25"
+            stroke="none"
           >
             <path
               d="M2370 4184 c-589 -70 -1135 -342 -1715 -855 -203 -179 -537 -540
-               -623 -674 -36 -56 -36 -134 0 -190 46 -72 240 -297 378 -438 493 -508 1042
-               -864 1560 -1012 225 -64 339 -79 590 -79 251 0 365 15 590 79 607 174 1274
-               647 1806 1283 146 174 158 195 158 262 0 67 -12 88 -158 262 -529 631 -1194
-               1105 -1796 1280 -202 59 -336 78 -555 82 -110 3 -216 2 -235 0z m435 -349
-               c471 -71 984 -348 1477 -799 151 -137 448 -454 448 -477 0 -3 -34 -46 -77 -94
-               -582 -666 -1244 -1089 -1848 -1180 -128 -19 -362 -19 -490 0 -435 66 -899 303
-               -1360 694 -167 141 -565 551 -565 581 0 4 34 47 77 95 578 661 1240 1086 1839
-               1179 122 19 375 19 499 1z"
+							-623 -674 -36 -56 -36 -134 0 -190 46 -72 240 -297 378 -438 493 -508 1042
+							-864 1560 -1012 225 -64 339 -79 590 -79 251 0 365 15 590 79 607 174 1274
+							647 1806 1283 146 174 158 195 158 262 0 67 -12 88 -158 262 -529 631 -1194
+							1105 -1796 1280 -202 59 -336 78 -555 82 -110 3 -216 2 -235 0z m435 -349
+							c471 -71 984 -348 1477 -799 151 -137 448 -454 448 -477 0 -3 -34 -46 -77 -94
+							-582 -666 -1244 -1089 -1848 -1180 -128 -19 -362 -19 -490 0 -435 66 -899 303
+							-1360 694 -167 141 -565 551 -565 581 0 4 34 47 77 95 578 661 1240 1086 1839
+							1179 122 19 375 19 499 1z"
             />
             <path
               d="M2420 3564 c-433 -79 -741 -361 -846 -774 -27 -106 -27 -354 0 -460
-               97 -380 376 -659 756 -756 106 -27 354 -27 460 0 380 97 659 376 756 756 15
-               58 19 110 19 230 0 120 -4 172 -19 230 -95 375 -366 650 -741 752 -68 19 -323
-               33 -385 22z m300 -350 c187 -42 358 -179 445 -359 52 -107 68 -189 63 -325 -5
-               -129 -30 -216 -90 -318 -42 -72 -158 -188 -230 -230 -211 -124 -485 -124 -696
-               0 -72 42 -188 158 -230 230 -124 211 -124 485 0 696 42 72 158 188 230 230
-               151 89 328 116 508 76z"
+							97 -380 376 -659 756 -756 106 -27 354 -27 460 0 380 97 659 376 756 756 15
+							58 19 110 19 230 0 120 -4 172 -19 230 -95 375 -366 650 -741 752 -68 19 -323
+							33 -385 22z m300 -350 c187 -42 358 -179 445 -359 52 -107 68 -189 63 -325 -5
+							-129 -30 -216 -90 -318 -42 -72 -158 -188 -230 -230 -211 -124 -485 -124 -696
+							0 -72 42 -188 158 -230 230 -124 211 -124 485 0 696 42 72 158 188 230 230
+							151 89 328 116 508 76z"
             />
           </g>
         </svg>
       {:else}
-        <!-- SVG pro hide.svg -->
-        <svg
-          version="1.0"
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 512.000000 512.000000"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <g
-            transform="translate(0,512) scale(0.1,-0.1)"
-            fill="rgba(30, 138, 37, 1)"
-            stroke="currentColor"
-            stroke-width="30"
-          >
-            <path
-              d="M4260 4470 c-14 -6 -147 -133 -297 -282 l-271 -271 -129 50 c-208 83
-               -406 135 -638 170 -184 27 -571 24 -764 -6 -509 -78 -959 -281 -1385 -624
-               -135 -108 -391 -366 -500 -502 -118 -149 -264 -368 -272 -410 -11 -60 4 -100
-               86 -223 240 -363 584 -709 930 -937 58 -38 107 -70 109 -72 3 -2 -104 -113
-               -236 -246 -207 -207 -242 -247 -248 -280 -11 -60 3 -107 44 -148 41 -41 88
-               -55 148 -44 34 6 227 196 1831 1798 1317 1317 1795 1801 1803 1826 22 67 -2
-               139 -63 184 -31 23 -111 32 -148 17z m-1360 -655 c172 -26 363 -76 514 -135
-               l30 -11 -164 -164 -164 -164 -27 19 c-52 38 -215 110 -294 132 -106 28 -344
-               31 -449 5 -183 -46 -328 -128 -462 -261 -133 -134 -215 -280 -261 -462 -27
-               -108 -24 -334 5 -444 23 -83 89 -234 131 -295 l20 -31 -203 -203 -203 -203
-               -95 59 c-332 209 -669 527 -878 829 l-51 74 50 73 c177 256 485 564 746 748
-               352 248 768 405 1181 448 124 13 448 5 574 -14z m-198 -634 c62 -16 178 -64
-               178 -74 0 -1 -195 -197 -434 -436 l-434 -434 -27 52 c-36 73 -65 191 -65 270
-               1 409 394 721 782 622z"
-            />
-            <path
-              d="M4137 3462 c-59 -59 -107 -112 -106 -117 0 -6 39 -40 87 -77 205
-               -157 475 -445 621 -660 l32 -48 -41 -60 c-172 -254 -471 -557 -735 -746 -452
-               -324 -980 -489 -1505 -470 -164 5 -215 11 -383 42 l-89 17 -129 -129 c-93 -93
-               -125 -130 -115 -136 28 -16 265 -69 401 -90 187 -29 568 -31 750 -5 645 95
-               1183 373 1675 866 176 177 291 316 420 509 129 192 129 209 12 388 -112 170
-               -265 357 -427 520 -137 138 -328 304 -349 304 -6 0 -60 -48 -119 -108z"
-            />
-            <path
-              d="M3336 2661 l-138 -138 -13 -79 c-16 -92 -73 -214 -134 -287 -94 -113
-               -238 -198 -375 -222 l-79 -13 -141 -141 c-77 -77 -137 -143 -134 -146 12 -12
-               165 -34 239 -35 253 -1 486 98 674 285 193 193 278 396 279 665 1 125 -16 250
-               -32 250 -4 0 -69 -62 -146 -139z"
-            />
-          </g>
+        <!-- Oko zavřené -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="hide" fill="#1E8A25">
+          <g fill="#1E8A25"> <path d="M22 12c0-.9-.4-1.7-1.1-2.1l-1.8-1.2c-.5-.3-1.1-.2-1.4.3-.3.5-.2 1.1.3 1.4l1.8 1.2c.2.1.2.3.2.4s0 .3-.2.5l-2 1.4c-1.8 1.2-4 1.8-6.2 1.7-.5 0-1 .4-1 .9 0 .6.4 1 .9 1h.6c2.4 0 4.7-.7 6.8-2.1l2-1.3c.7-.4 1.1-1.2 1.1-2.1zM3.1 14.1l2 1.4c.5.2.9.5 1.3.7l-1.1 1.1c-.4.4-.4 1 0 1.4.2.2.4.3.7.3s.5-.1.7-.3l2.1-2.1 1.4-1.4 4.8-4.8L16.4 9l2.1-2.1c.4-.4.4-1 0-1.4s-1-.4-1.4 0L15.6 7c-3.5-1.1-7.4-.5-10.4 1.5l-2 1.3C2.4 10.3 2 11.1 2 12s.4 1.7 1.1 2.1zM12 9.6c.3 0 .6.1.9.2l-3.1 3.1c-.1-.3-.2-.6-.2-.9 0-1.3 1.1-2.4 2.4-2.4zm-7.8 1.9 2-1.4c.9-.4 1.7-.8 2.6-1.1-.8.8-1.2 1.8-1.2 3 0 .8.2 1.6.7 2.3l-.4.4c-.6-.2-1.1-.5-1.6-.9l-2-1.4c-.3-.1-.3-.3-.3-.4s0-.3.2-.5z"></path> </g>
         </svg>
       {/if}
     </button>
   </div>
-  {#if passwordError}
-    <p class="error-message">{passwordError}</p>
-  {/if}
 </main>
 
 <style>
-  .password-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: fit-content;
-  }
-
-  .error-message {
-    color: red; /* Nastaví text chybové zprávy na červenou */
-    font-size: 14px;
-    margin-top: 5px;
-    margin-bottom: 0;
-  }
-
-  input[type="password"],
-  input[type="text"] {
-    height: 30px;
-    padding: 8px;
-    padding-right: 50px; /* Rezerva na ikonu oka */
-    border-radius: 8px;
-    border: none;
-    font-size: 18px;
-    background: #ffffff;
-    color: #000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    max-width: 250px; /* Maximální šířka vstupního pole */
-    white-space: nowrap;
-    overflow: hidden;
-    width: 80%;
-  }
-
-  input[type="password"]::placeholder,
-  input[type="text"]::placeholder {
-    text-align: center;
-    font-size: 18px;
-    margin-right: -40px;
-  }
-
-  .show-hide-password {
-    position: absolute;
-    right: 5px;
-    background: transparent;
+  button {
+    background: none;
     border: none;
     cursor: pointer;
-    width: 43px;
-    height: 33px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: color 0.3s ease;
+    position: absolute;
+    right: -13px;
+    transform: translateY(-50%);
+  }
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: #555;
   }
 
-  @media (max-width: 768px) {
-    input[type="password"],
-    input[type="text"] {
-      max-width: 100%;
-    }
-    .password-container,
-    input {
-      width: 100%;
+  @media screen and (max-width: 480px) {
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      right: -15px;
+      top: 2px;
+      transform: translateY(-50%);
     }
   }
 </style>

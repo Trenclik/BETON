@@ -1,151 +1,194 @@
 <script lang="ts">
+	import { text } from 'drizzle-orm/sqlite-core';
   import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
   import StylingPage from "$lib/Components/Styling-page.svelte";
 
-  let username = $state("");  
-  let showErrors = $state(false);
-  let errorMessage = $derived.by(() => (showErrors && !username.trim() ? "Toto pole musí být vyplněno" : ""));
+  let usernameOrEmail = $state("");
+  let password = $state("");
+  let errorMessage = $state("");
+  let successMessage = $state("");
+  let passwordVisible = $state(false);
 
-  function handleLogin() {
-    showErrors = true; 
-    if (!username.trim()) return; 
+  function validateForm() {
+    if (!usernameOrEmail || !password) {
+      errorMessage = "Všechna pole musí být vyplněna";
+      return false;
+    }
+    return true;
+  }
 
+  async function login(event: Event) {
+    event.preventDefault();
+    if (!validateForm()) return;
+
+    try {
+      const response = await fetch("/login?/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ usernameOrEmail, password }),
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Přihlášení selhalo");
+
+      successMessage = "Přihlášení úspěšné!";
+      errorMessage = "";
+    } catch (error) {
+      errorMessage = (error as Error).message;
+    }
   }
 </script>
 
 <StylingPage />
-
 <main>
-  <div class="login-section">
-    <div class="inputs">
-      <input class="username" type="text" placeholder="Uživatelské jméno" bind:value={username}/>
+  <div class="LoginSection">
+    <form onsubmit={login}>
+      <input
+        type="text"
+        placeholder="Uživatelské jméno"
+        bind:value={usernameOrEmail}
+      />
+      <div class="password-container">
+        <input
+          type={passwordVisible ? "text" : "password"}
+          placeholder="Heslo"
+          bind:value={password}
+        />
+        <ShowHideButton bind:visible={passwordVisible} class="show-hide-icon" />
+      </div>
       {#if errorMessage}
-        <p class="error-message">{errorMessage}</p>
+        <p class="error">{errorMessage}</p>
       {/if}
-      <ShowHideButton />
-    </div>
-    <div class="Forgot-Password">
-      <a class="forgot-pass" href="./ForgetPassword">Zapomenuté heslo</a>
-    </div>
-    <button class="login-button" onclick={handleLogin}>Přihlásit se</button>
-    <div class="register-section">
-      <p>Nemáte účet?</p>
-      <a class="register" href="./Register">Zaregistrovat se</a>
-    </div>
+      {#if successMessage}
+        <p class="success">{successMessage}</p>
+      {/if}
+      <a class="ForgetPass" href="./ForgetPassword">Zapomenuté heslo?</a>
+      <button type="submit">Přihlásit se</button>
+      <div>
+        <p>Ještě nemáte účet? <a href="./Register">Zaregistrovat se</a></p>
+      </div>
+    </form>
   </div>
 </main>
+
 <style>
-  main {
+  /* Zarovnání formuláře doprostřed */
+  /* Vycentrování celé sekce uvnitř okna */
+  .LoginSection {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
   }
 
-  .login-section {
+  /* Styl formuláře */
+  form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: 400px;
-  }
-  /* === Vstupní pole === */
-  .inputs {
-    width: 80%;
-    display: flex;
-    flex-direction: column;
     gap: 15px;
-    margin-top: 125px;
+    width: 100%;
+    max-width: 320px;
+    padding: 20px;
   }
 
-  .error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: -10px;
-    margin-bottom: -8px;
-
-  }
-
+  /* Vstupní pole */
   input {
-    height: 30px;
-    padding: 8px;
-    border-radius: 8px;
+    width: 90%;
+    padding: 15px;
+    border-radius: 10px;
     border: none;
-    font-size: 18px;
-    background: #ffffff; /* Bílé vstupní pole */
-    color: #000; /* Černý text */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
   }
 
   input::placeholder {
     text-align: center;
-    align-items: center;
-    font-size: 18px;
   }
 
-  /* === Zapomenuté heslo === */
-  .forgot-pass {
-    display: flex;
-    justify-content: end;
-    font-size: 16px;
-    color: #00a000; /* Zelená barva */
-    text-decoration: none;
-    margin-bottom: 20px;
+  .password-container input::placeholder{
+    text-align: center;
+    margin-left: -50px;
+  }
+
+  .password-container input {
+    width: 75%;
+    padding-right: 62px;
+    white-space: nowrap; /* Zabraňuje zalamování textu */
+    overflow: hidden; /* Skryje přetékající text */
+  }
+
+  /* Tlačítko přihlášení */
+  button {
+    width: 100%;
+    padding: 15px;
+    border-radius: 20px;
+    background-color: #28a745;
+    color: white;
     font-weight: bold;
-    margin-right: 30px;
-
+    font-size: 1.2rem;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   }
 
-  .Forgot-Password {
-    width: 80%; /* Stejná šířka jako .inputs a .login-button */
-    display: flex;
-    justify-content: end;
-    align-self: flex-end; /* Posunutí doprava */
-    margin-top: 10px;
+  .error {
+    margin: 0;
+    color: red;
   }
 
-  .forgot-pass:hover {
+  button:hover {
+    background-color: #218838;
+  }
+
+  /* Odkaz "Zapomenuté heslo" */
+  a {
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: #28a745;
+    font-weight: bold;
+  }
+
+  .ForgetPass{
+    margin-left: 180px;
+  }
+
+  a:hover {
     text-decoration: underline;
   }
 
-  /* === Přihlašovací tlačítko === */
-  .login-button {
-    width: 80%;
-    height: 50px;
-    background: #008000;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
+  /* Ikona pro zobrazení hesla */
+  .password-container :global(.show-hide-icon) {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
-    margin-top: 20px;
-    margin-bottom: 0;
   }
 
-  .login-button:hover {
-    background: #006600;
+  /* Kontejner pro pole hesla */
+  .password-container {
+    position: relative;
+    width: 100%;
   }
 
-  /* === Sekce registrace === */
-  .register-section {
-    margin-top: 125px;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
+  /* Text pod formulářem */
+  .LoginSection div p {
+    font-size: 0.9rem;
+    color: white;
+    text-align: center;
   }
 
-  .register {
-    color: #00a000; /* Zelená */
+  .LoginSection div p a {
+    color: #28a745;
     font-weight: bold;
     text-decoration: none;
   }
 
-  .register:hover {
+  .LoginSection div p a:hover {
     text-decoration: underline;
   }
 </style>
