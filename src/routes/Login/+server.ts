@@ -5,16 +5,18 @@ import { serialize } from 'cookie';
 import { eq } from 'drizzle-orm';
 
 export async function GET({ request }: { request: Request }): Promise<Response> {
+    //skracuje volání funkce pro získání session cookie
     const sessionCookie = request.headers.get('cookie')?.split(';').find(cookie => cookie.trim().startsWith('session='));
-  
+
+    //pokud neexistuje session cookie vrátí status 401 (uživatel není ověřen)
     if (!sessionCookie) {
         return new Response(JSON.stringify({ success: false, message: 'Not authenticated' }), { status: 401 });
     }
   
-    const userId = sessionCookie.split('=')[1];
+    const userId = sessionCookie.split('=')[1]; //druhý element session cookie je userId
     
     try {
-        const user = await db.select().from(usersTable).where(eq(usersTable.id, userId)).get();
+        const user = await db.select().from(usersTable).where(usersTable.id == userId).get();
   
         if (!user) {
             return new Response(JSON.stringify({ success: false, message: 'User not found' }), { status: 404 });
@@ -33,7 +35,7 @@ export async function POST({ request }: { request: Request }): Promise<Response>
         const email = formData.get('') as string | null;
         const password = formData.get('password') as string | null;
   
-        if (!email || !password) {
+        if (!emai//pokud neexistuje session cookie vrátí status 401 (uživatel není ověřen)l || !password) {
             return new Response(
                 JSON.stringify({ success: false, message: 'Invalid input' }),
                 { status: 400 }
