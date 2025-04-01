@@ -11,7 +11,6 @@ export const usersTable = sqliteTable('user', {
 	profileImage: text('profile_image').default("https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"),
 	email: text('email').notNull(),
 	name: text('name').notNull(),
-	sname: text('surname').notNull(),
 });
 export const ticketTable = sqliteTable('ticket',{
 	id: integer('ID').primaryKey(),
