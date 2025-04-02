@@ -41,103 +41,133 @@
 
 <StylingPage />
 <main>
-    <div class="Login-Section">
-        <input class="UserName" type="text" placeholder="Uživatelské jméno" bind:value={usernameOrEmail}>
-        <div class="PasswordContainer">
-          <input class="Password" type={passwordVisible ? "text" : "password"} placeholder="Heslo" bind:value={password}>
-          <ShowHideButton bind:visible={passwordVisible} class="show-hide-icon"/>
-        </div>
-        <div class="ForgetPassword">
-          <a href="./ForgetPassword"><strong>Zapomenuté heslo</strong></a>
-        </div>
-        <button type="submit" onclick={login}><strong>Přihlásit se</strong></button>
-      </div>
-    <div class="Register-Container">
-      <p>Nematé učet? <a href="./Register">Registrovat se</a></p>
+  <div class="Login-Section">
+    <input
+      class="UserName"
+      type="text"
+      placeholder="Uživatelské jméno"
+      bind:value={usernameOrEmail}
+    />
+    <div class="PasswordContainer">
+      <input
+        class="Password"
+        type={passwordVisible ? "text" : "password"}
+        placeholder="Heslo"
+        bind:value={password}
+      />
+      <ShowHideButton bind:visible={passwordVisible} class="show-hide-icon" />
     </div>
+    <div class="ForgetPassword">
+      <a href="./ForgetPassword"><strong>Zapomenuté heslo</strong></a>
+    </div>
+    <button type="submit" onclick={login}><strong>Přihlásit se</strong></button>
+  </div>
+  <div class="Register-Container">
+    <p>Nematé učet? <a href="./Register">Registrovat se</a></p>
+  </div>
 </main>
 
 <style>
+  .Login-Section {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 645px;
+  }
+
+  .PasswordContainer {
+    margin: 0;
+    margin-top: 20px;
+  }
+
+  .Login-Section input {
+    margin: 0;
+    height: 40px;
+    border-radius: 7px;
+    box-shadow: none;
+    border: none;
+    font-size: 15px;
+  }
+
+  input::placeholder {
+    text-align: center;
+    font-size: 15px;
+  }
+
+  .UserName {
+    width: 280px;
+  }
+
+  .Password {
+    width: 233px;
+    padding-right: 50px;
+  }
+
+  .Password::placeholder {
+    padding-left: 50px;
+  }
+
+  a {
+    color: rgba(30, 138, 37, 1);
+  }
+
+  .ForgetPassword {
+    margin: 0;
+    margin-left: 155px;
+    margin-top: 8px;
+    margin-bottom: 45px;
+  }
+
+  button {
+    margin: 0;
+    width: 222px;
+    height: 43px;
+    background: rgba(30, 138, 37, 1);
+    color: white;
+    border-radius: 8px;
+    box-shadow: none;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  p {
+    color: white;
+  }
+
+  .Register-Container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -30px;
+  }
+
+  @media (max-width: 1440px) {
     .Login-Section{
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      height: 645px;
+      height: 640px;
     }
+  }
 
-    .PasswordContainer{
-      margin: 0;
-      margin-top: 20px;
+  @media (max-width: 1024px) {
+    .Login-Section{
+      height: 640px;
     }
-
-    .Login-Section 
-    input{
-      margin: 0;
-      height: 40px;
-      border-radius: 7px;
-      box-shadow: none;
-      border: none;
-      font-size: 15px;
+   .Register-Container {
+      margin-top: -90px;
     }
+  }
 
-
-
-    input::placeholder{
-      text-align: center;
-      font-size: 15px;
-      
+  @media (max-width: 768px) {
+    .Register-Container {
+      margin-top: -85px;
     }
+  }
 
-    .UserName{
-      width: 280px;
+  @media (max-width: 480px) {
+    .Register-Container {
+      margin-top: -125px;
     }
-
-    .Password{
-      width: 233px;
-      padding-right: 50px;
-    }
-
-    .Password::placeholder{
-      padding-left: 50px;
-    }
-
-    a{
-      color: rgba(30, 138, 37, 1);
-    }
-
-    .ForgetPassword{
-      margin: 0;
-      margin-left: 155px;
-      margin-top: 8px;
-      margin-bottom: 45px;
-      
-    }
-
-    button{
-      margin: 0;
-      width: 222px;
-      height: 43px;
-      background: rgba(30, 138, 37, 1);
-      color: white;
-      border-radius: 8px;
-      box-shadow: none;
-      border: none;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    p{
-      color: white;
-    }
-
-    .Register-Container{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: -30px;
-      
-    }
+  }
 </style>
-

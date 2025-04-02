@@ -1,99 +1,152 @@
 <script lang="ts">
-    import StylingPage from "$lib/Components/Styling-page.svelte";
-    import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
-  
-    let password = $state("");
-    let confirmPassword = $state("");
-    let showErrors = $state(false);
-    let submitted = $state(false);
-  
-    // Jednodušší kontrola přímo v handleReset
-    function passwordsMatch() {
-      return password.trim() && confirmPassword.trim() && password === confirmPassword;
+  import StylingPage from "$lib/Components/Styling-page.svelte";
+  import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
+
+  let password = $state("");
+  let confirmPassword = $state("");
+  let errorMessage = $state("");
+  let successMessage = $state("");
+  let passwordVisible = $state(false);
+  let confirmPasswordVisible = $state(false);
+
+  function validateForm() {
+    if (!password || !confirmPassword) {
+      errorMessage = "Všechna pole musí být vyplněna.";
+      return false;
     }
-  
-    function handleReset() {
-      showErrors = true;
-      submitted = true;
-      if (!passwordsMatch()) return;
-      // Tady přidat logiku pro odeslání nového hesla na server
-      console.log("Heslo úspěšně změněno!");
+    if (password.length < 8) {
+      errorMessage = "Heslo musí mít alespoň 8 znaků.";
+      return false;
     }
-  </script>
-  
-  <StylingPage />
-  
-  <main>
-    <div class="NewPasswordSection">
-      <h1>Obnova hesla</h1>
-      <form onsubmit={e => { e.preventDefault(); handleReset(); }}>
-        <div class="Password">
-            <label for="password">Nové heslo</label>
-            <ShowHideButton bind:value={password} bind:submitted={submitted} name="password" />
-        </div>
-        <div class="ConfirmPassword">
-            <label for="confirmPassword">Potvrzení hesla</label>
-            <ShowHideButton bind:value={confirmPassword} bind:submitted={submitted} name="confirm" />
-        </div>
-        {#if showErrors && !passwordsMatch()}
-          <p class="error-message">Hesla se neshodují!</p>
-        {/if}
-  
-        <button type="submit" disabled={!passwordsMatch()}>Obnovit heslo</button>
-      </form>
-    </div>
-  </main>
-  
-  <style>
-.NewPasswordSection {
-    text-align: center;
-    color: white;
+    if (password !== confirmPassword) {
+      errorMessage = "Hesla se neshodují.";
+      return false;
+    }
+    errorMessage = "";
+    return true;
+  }
+
+  async function resetPassword(event: Event) {
+    event.preventDefault();
+    if (!validateForm()) return;
+
+    try {
+      const response = await fetch("/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Obnova hesla selhala");
+
+      successMessage = "Heslo bylo úspěšně změněno!";
+    } catch (error) {
+      errorMessage = (error as Error).message;
+    }
+  }
+</script>
+
+<StylingPage />
+
+<main>
+  <div class="PasswordReset-Section">
+    <h1>Obnova hesla</h1>
+    <form onsubmit={resetPassword}>
+      <div class="PasswordContainer">
+        <label for="password">Nové heslo</label>
+        <input
+          type={passwordVisible ? "text" : "password"}
+          bind:value={password}
+          placeholder="Nové heslo"
+        />
+        <ShowHideButton bind:visible={passwordVisible} class="show-hide-icon" />
+      </div>
+
+      <div class="PasswordContainer">
+        <label for="confirmPassword">Potvrzení hesla</label>
+        <input
+          type={confirmPasswordVisible ? "text" : "password"}
+          bind:value={confirmPassword}
+          placeholder="Potvrzení hesla"
+        />
+        <ShowHideButton
+          bind:visible={confirmPasswordVisible}
+          class="show-hide-icon"
+        />
+      </div>
+      {#if errorMessage}
+        <p class="error-message">{errorMessage}</p>
+      {/if}
+      {#if successMessage}
+        <p class="success-message">{successMessage}</p>
+      {/if}
+
+      <button type="submit"><strong>Obnovit heslo</strong></button>
+    </form>
+  </div>
+</main>
+
+<style>
+  .PasswordReset-Section {
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     height: 675px;
-}
+  }
 
-h1 {
+  h1 {
     font-size: 24px;
-    margin-bottom: 40px;
-}
+    margin-bottom: 20px;
+    color: white;
+  }
 
-form {
+  label {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: white;
+  }
+
+  .PasswordContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
-}
+    margin-bottom: 15px;
+  }
 
-label {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-button {
-    background: #1e8a25;
-    color: white;
-    width: 200px;
+  .PasswordContainer input {
     height: 40px;
-    font-size: 18px;
+    width: 280px;
+    border-radius: 7px;
     border: none;
-    border-radius: 5px;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  button {
+    width: 222px;
+    height: 43px;
+    background: rgba(30, 138, 37, 1);
+    color: white;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
     cursor: pointer;
-}
+  }
 
-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
+  button:hover {
+    background: rgba(20, 120, 30, 1);
+  }
 
-.error-message {
+  .error-message {
     color: red;
-    font-size: 18px;
-    margin-top: -30px;
+    font-size: 16px;
+  }
 
-}
-
-  </style>
-  
+  .success-message {
+    color: green;
+    font-size: 16px;
+  }
+</style>

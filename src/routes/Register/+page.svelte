@@ -1,173 +1,171 @@
 <script lang="ts">
+  import { text } from "drizzle-orm/sqlite-core";
   import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
   import StylingPage from "$lib/Components/Styling-page.svelte";
 
-  let password = $state("");
-  let confirmPassword = $state("");
   let username = $state("");
   let email = $state("");
-  let showErrors = $state(false);
-  let submitted = $state(false); // Stav pro odeslání formuláře
+  let phone = $state("");
+  let password = $state("");
+  let confirmPassword = $state("");
+  let errorMessage = $state("");
+  let passwordVisible = $state(false);
+  let confirmPasswordVisible = $state(false);
 
-  let usernameError = $derived.by(() =>
-    showErrors && !username.trim() ? "Toto pole musí být vyplněno" : ""
-  );
-
-  let emailError = $derived.by(() => {
-    if (!showErrors) return "";
-    if (!email.trim()) return "Email je povinný!";
-    if (!email.match(/.+@.+\..+/)) {
-      return "Neplatný email!";
+  function validateForm() {
+    if (!username || !email || !password || !confirmPassword) {
+      errorMessage = "Všechna pole kromě telefonu musí být vyplněna.";
+      return false;
     }
-    return "";
-  });
+    if (password.length < 8) {
+      errorMessage = "Heslo musí mít alespoň 8 znaků.";
+      return false;
+    }
+    if (password !== confirmPassword) {
+      errorMessage = "Hesla se neshodují.";
+      return false;
+    }
+    errorMessage = "";
+    return true;
+  }
 
-  function handleLogin() {
-    showErrors = true; // Teď se zobrazí chybové zprávy
-    submitted = true; // Nastavíme, že formulář byl odeslán
-    if (!username.trim() || !email.trim()) return;
+  async function register(event: Event) {
+    event.preventDefault();
+    if (!validateForm()) return;
+    try {
+      const response = await fetch("https://tvuj-backend.com/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, phone, password }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Registrace selhala");
+      alert("Registrace úspěšná!");
+    } catch (error) {
+      errorMessage = (error as Error).message;
+    }
   }
 </script>
 
 <StylingPage />
+
 <main>
-  <div class="register-section">
-    <div class="inputs">
-      <input type="text" placeholder="Uživatelské jméno" bind:value={username} />
-      {#if usernameError}
-        <p class="error-message">{usernameError}</p>
-      {/if}
+  <div class="Register-Container">
+    <input type="text" placeholder="Uživatelské jméno" bind:value={username} />
+    <input type="email" placeholder="Email" bind:value={email} />
 
-      <input type="email" placeholder="Email" bind:value={email} />
-      {#if emailError}
-        <p class="error-message">{emailError}</p>
-      {/if}
-
-      <ShowHideButton bind:value={password} bind:submitted={submitted} name="password" />
-      <ShowHideButton bind:value={confirmPassword} bind:submitted={submitted} name="confirm" />
-
-      {#if password && confirmPassword && password !== confirmPassword}
-        <p class="error-message">Hesla se neshodují!</p>
-      {/if}
-
-      <div class="checkingForAgreement">
-        <input type="checkbox" id="souhlas" name="souhlas" />
-        <label for="souhlas">Souhlas s <strong>podmínkami</strong></label>
-      </div>
+    <div class="Password-Container">
+      <input
+        type={passwordVisible ? "text" : "password"}
+        placeholder="Heslo"
+        bind:value={password}
+      />
+      <ShowHideButton bind:visible={passwordVisible} class="show-hide-icon" />
     </div>
-    <button class="register-button" onclick={handleLogin}>Registrovat se</button
-    >
+
+    <div class="Password-Container">
+      <input
+        type={confirmPasswordVisible ? "text" : "password"}
+        placeholder="Potvrzení hesla"
+        bind:value={confirmPassword}
+      />
+      <ShowHideButton
+        bind:visible={confirmPasswordVisible}
+        class="show-hide-icon"
+      />
+    </div>
+
+    <!-- Checkbox a text v jednom řádku -->
+    <div class="checkbox-container">
+      <input type="checkbox" class="checkbox" />
+      <p>Souhlasím s <strong><a href="/">podmínky</a></strong></p>
+    </div>
+
+    <button><strong>Registrovat se</strong></button>
   </div>
 </main>
 
 <style>
-  main {
+  .Register-Container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-
-  .register-section {
-    display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    max-width: 400px;
-  }
-
-  .inputs {
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 0;
-  }
-
-  .error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: -10px;
-    margin-bottom: -8px;
-  }
-
-  input {
-    height: 30px;
-    padding: 8px;
-    border-radius: 8px;
-    border: none;
-    font-size: 18px;
-    background: #ffffff;
-    color: #000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-
-  input::placeholder {
     text-align: center;
-    font-size: 18px;
+    height: 685px;
   }
 
-  .checkingForAgreement {
-    margin-left: 25px;
-    font-size: 14px;
-    font-weight: bold;
-    color: white; /* Barva běžného textu */
+  .Register-Container input {
+    height: 40px;
+    width: 280px;
+    border-radius: 7px;
+    border: none;
+    font-size: 15px;
+    text-align: center;
+    margin-bottom: 10px; /* Přidána mezera mezi inputy */
   }
 
-  .checkingForAgreement input[type="checkbox"] {
+  .Password-Container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .Password-Container input {
+    width: 280px;
+  }
+
+  .checkbox-container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    gap: 2px; /* Mezery mezi checkboxem a textem */
+  }
+
+  input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: green; /* Barva checkboxu */
-  }
-
-  .checkingForAgreement label {
-    color: white;
-  }
-
-  .checkingForAgreement label strong {
-    color: green; /* Zelená barva pro důležitou část textu */
-  }
-
-  .checkingForAgreement {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-  }
-
-  /* === Registrovací tlačítko === */
-  .register-button {
-    width: 80%;
-    height: 50px;
-    background: #008000;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
-    margin-top: 20px;
   }
 
-  .register-button:hover {
-    background: #006600;
+  button {
+    width: 222px;
+    height: 43px;
+    background: rgba(30, 138, 37, 1);
+    color: white;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
   }
 
-  /* === Responzivní design === */
-  @media (max-width: 500px) {
-    .register-section {
-      width: 90%;
-    }
+  p {
+    color: white;
+    font-size: 14px;
+    margin: 0;
+    margin-top: 3px;
+  }
 
-    .checkingForAgreement {
-      margin-left: 55px;
+  a {
+    color: rgba(30, 138, 37, 1);
+  }
+
+  @media (max-width: 480px) {
+    .Register-Container {
+      height: 642px;
     }
-    input {
-      font-size: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .Register-Container {
+      height: 642px;
     }
-    .register-button {
-      font-size: 16px;
+  }
+
+  @media (max-width: 1024px) {
+    .Register-Container {
+      height: 642px;
     }
   }
 </style>

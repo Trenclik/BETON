@@ -54,27 +54,6 @@
 </main>
 
 <style>
-  .toggle {
-    position: absolute;
-    top: 284px;
-    left: 745px;
-
-    /* Odstranění pozadí a okrajů */
-    background: none;
-    border: none;
-
-    /* Zajištění, že kliknutelná plocha je pouze SVG */
-    padding: 0;
-    width: auto;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    /* Ukazatel pro lepší UX */
-    cursor: pointer;
-  }
-
   /* SVG ikoně dáme pevnou velikost */
   .toggle svg {
     width: 30px;

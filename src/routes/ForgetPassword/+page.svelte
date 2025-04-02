@@ -47,7 +47,7 @@
         font-size: 18px;
         border: none;
         border-radius: 8px;
-        margin-bottom: 170px;
+        margin-bottom: 125px;
     }
 
     input::placeholder {
