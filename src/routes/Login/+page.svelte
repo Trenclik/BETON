@@ -41,158 +41,103 @@
 
 <StylingPage />
 <main>
-  <div class="LoginSection">
-    <form onsubmit={login}>
-      <input
-        class="UserName"
-        type="text"
-        placeholder="Uživatelské jméno"
-        bind:value={usernameOrEmail}
-      />
-      <div class="password-container">
-        <input
-          class="Password"
-          type={passwordVisible ? "text" : "password"}
-          placeholder="Heslo"
-          bind:value={password}
-        />
-        <ShowHideButton bind:visible={passwordVisible} class="show-hide-icon" />
+    <div class="Login-Section">
+        <input class="UserName" type="text" placeholder="Uživatelské jméno" bind:value={usernameOrEmail}>
+        <div class="PasswordContainer">
+          <input class="Password" type={passwordVisible ? "text" : "password"} placeholder="Heslo" bind:value={password}>
+          <ShowHideButton bind:visible={passwordVisible} class="show-hide-icon"/>
+        </div>
+        <div class="ForgetPassword">
+          <a href="./ForgetPassword"><strong>Zapomenuté heslo</strong></a>
+        </div>
+        <button type="submit" onclick={login}><strong>Přihlásit se</strong></button>
       </div>
-      {#if errorMessage}
-        <p class="error">{errorMessage}</p>
-      {/if}
-      {#if successMessage}
-        <p class="success">{successMessage}</p>
-      {/if}
-      <a class="ForgetPass" href="./ForgetPassword">Zapomenuté heslo?</a>
-      <button type="submit">Přihlásit se</button>
-      <div class="Register">
-        <p>Ještě nemáte účet? <a href="./Register">Zaregistrovat se</a></p>
-      </div>
-    </form>
-  </div>
+    <div class="Register-Container">
+      <p>Nematé učet? <a href="./Register">Registrovat se</a></p>
+    </div>
 </main>
 
 <style>
-  /* Zarovnání formuláře doprostřed */
-  .LoginSection {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
+    .Login-Section{
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      height: 645px;
+    }
 
-  /* Styl formuláře */
-  form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    max-width: 320px;
-    padding: 20px;
-    border-radius: 25px;
-  }
+    .PasswordContainer{
+      margin: 0;
+      margin-top: 20px;
+    }
 
-  /* Vstupní pole */
-  input {
-    width: 73%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    font-size: 1rem;
-    padding-right: 50px;
-  }
-
-  .password-container {
-		display: flex;
-		align-items: center;
-		position: relative;
-		width: 307px;
-	}
-
-  input::placeholder {
-    text-align: center;
-    margin-left: -50px;
-    margin-right: 0;
-  }
-
-  /* Ikona pro zobrazení hesla */
-  :global(.show-hide-icon) {
-    position: absolute;
-    right: -2px;
-    top: 11px;
-    transform: translateY(-50%);
-    cursor: pointer;
-  }
-
-  /* Odkaz Zapomenuté heslo */
-  .ForgetPass {
-    align-self: flex-end;
-    margin-right: 5%;
-    font-size: 0.8rem;
-    color: #28a745;
-    font-weight: bold;
-    text-decoration: none;
-  }
-
-  .ForgetPass:hover {
-    text-decoration: underline;
-  }
-
-  /* Tlačítko Přihlásit se */
-  button {
-    width: 85%;
-    padding: 12px;
-    border-radius: 20px;
-    background-color: #28a745;
-    color: white;
-    font-weight: bold;
-    font-size: 1.1rem;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.3s;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  }
-
-  button:hover {
-    background-color: #218838;
-  }
-
-  /* Text pod formulářem */
-  .LoginSection div p {
-    font-size: 0.9rem;
-    color: white;
-    text-align: center;
-  }
-
-  /* Odkaz na registraci */
-  .LoginSection div p a {
-    color: #28a745;
-    font-weight: bold;
-    text-decoration: none;
-  }
-
-  .LoginSection div p a:hover {
-    text-decoration: underline;
-  }
-
-  /* Chybová zpráva */
-  .error {
-    color: red;
-    font-size: 0.9rem;
-    text-align: center;
-  }
-
-  /* Úspěšná zpráva */
-  .success {
-    color: #28a745;
-    font-size: 0.9rem;
-    text-align: center;
-  }
+    .Login-Section 
+    input{
+      margin: 0;
+      height: 40px;
+      border-radius: 7px;
+      box-shadow: none;
+      border: none;
+      font-size: 15px;
+    }
 
 
+
+    input::placeholder{
+      text-align: center;
+      font-size: 15px;
+      
+    }
+
+    .UserName{
+      width: 280px;
+    }
+
+    .Password{
+      width: 233px;
+      padding-right: 50px;
+    }
+
+    .Password::placeholder{
+      padding-left: 50px;
+    }
+
+    a{
+      color: rgba(30, 138, 37, 1);
+    }
+
+    .ForgetPassword{
+      margin: 0;
+      margin-left: 155px;
+      margin-top: 8px;
+      margin-bottom: 45px;
+      
+    }
+
+    button{
+      margin: 0;
+      width: 222px;
+      height: 43px;
+      background: rgba(30, 138, 37, 1);
+      color: white;
+      border-radius: 8px;
+      box-shadow: none;
+      border: none;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    p{
+      color: white;
+    }
+
+    .Register-Container{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: -30px;
+      
+    }
 </style>
+

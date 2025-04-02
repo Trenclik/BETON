@@ -54,30 +54,37 @@
 </main>
 
 <style>
-  button {
+  .toggle {
+    position: absolute;
+    top: 284px;
+    left: 745px;
+
+    /* Odstranění pozadí a okrajů */
     background: none;
     border: none;
+
+    /* Zajištění, že kliknutelná plocha je pouze SVG */
+    padding: 0;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Ukazatel pro lepší UX */
     cursor: pointer;
-    position: absolute;
-    right: 30px;
-    top: 1px;
-    transform: translateY(-50%);
-  }
-  svg {
-    width: 24px;
-    height: 24px;
-    fill: #555;
   }
 
-  @media screen and (max-width: 480px) {
-    button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      position: absolute;
-      right: -15px;
-      top: 2px;
-      transform: translateY(-50%);
-    }
+  /* SVG ikoně dáme pevnou velikost */
+  .toggle svg {
+    width: 30px;
+    height: 25px;
+  }
+
+  /* Zvýraznění při najetí myší */
+  .toggle:hover svg {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
   }
 </style>
+
