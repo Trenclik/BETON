@@ -60,8 +60,20 @@
     <div class="ForgetPassword">
       <a href="./ForgetPassword"><strong>Zapomenuté heslo</strong></a>
     </div>
-    <button type="submit" onclick={login}><strong>Přihlásit se</strong></button>
+
+    <button type="submit" onclick={login}>
+      <strong>Přihlásit se</strong>
+    </button>
+
+    {#if errorMessage}
+      <p class="error">{errorMessage}</p>
+    {/if}
+
+    {#if successMessage}
+      <p class="success">{successMessage}</p>
+    {/if}
   </div>
+
   <div class="Register-Container">
     <p>Nematé učet? <a href="./Register">Registrovat se</a></p>
   </div>
@@ -74,7 +86,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    height: 645px;
+    height: 664px;
   }
 
   .PasswordContainer {
@@ -107,6 +119,18 @@
 
   .Password::placeholder {
     padding-left: 50px;
+  }
+
+  .error {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  .success {
+    color: #1e8a25;
+    margin-top: 10px;
+    font-size: 14px;
   }
 
   a {
@@ -144,17 +168,13 @@
     margin-top: -30px;
   }
 
-  @media (max-width: 1440px) {
-    .Login-Section{
-      height: 640px;
-    }
-  }
+
 
   @media (max-width: 1024px) {
-    .Login-Section{
+    .Login-Section {
       height: 640px;
     }
-   .Register-Container {
+    .Register-Container {
       margin-top: -90px;
     }
   }

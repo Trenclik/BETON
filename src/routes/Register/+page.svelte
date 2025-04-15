@@ -14,7 +14,7 @@
 
   function validateForm() {
     if (!username || !email || !password || !confirmPassword) {
-      errorMessage = "Všechna pole kromě telefonu musí být vyplněna.";
+      errorMessage = "Všechna pole musí být vyplněna.";
       return false;
     }
     if (password.length < 8) {
@@ -81,7 +81,11 @@
       <p>Souhlasím s <strong><a href="/">podmínky</a></strong></p>
     </div>
 
-    <button><strong>Registrovat se</strong></button>
+    <button onclick={register}><strong>Registrovat se</strong></button>
+
+    {#if errorMessage}
+      <p class="error">{errorMessage}</p>
+    {/if}
   </div>
 </main>
 
@@ -92,7 +96,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    height: 685px;
+    height: 740px;
   }
 
   .Register-Container input {
@@ -149,6 +153,12 @@
 
   a {
     color: rgba(30, 138, 37, 1);
+  }
+
+  .error {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
   }
 
   @media (max-width: 480px) {

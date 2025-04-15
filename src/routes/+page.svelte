@@ -11,6 +11,6 @@
     <a style="color: green;" href="./Login">Login</a>
     <a style="color: green;" href="./FaildRegister">FaildRegister</a>
     <a style="color: red;" href="./EmailWeb">EmailWeb</a>
-    <a style="color: red;" href="./AnotherWayToLogin">AnotherWayToLogin</a>
-    <a href="./SettingNewPassword">SettingNewPassword</a>
+    <a style="color: green;" href="./AnotherWayToLogin">AnotherWayToLogin</a>
+    <a style="color: green;" href="./SettingNewPassword">SettingNewPassword</a>
 </main>
