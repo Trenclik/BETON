@@ -1,47 +1,188 @@
 <script>
-	let selectedCategory = $state('');
+  let selectedCategory = $state("");
+  let title = $state("");
+  let description = $state("");
+  let isFormComplete = false;
+
+  $effect(() => {
+    isFormComplete =
+      title.trim() !== "" &&
+      selectedCategory !== "" &&
+      description.trim() !== "";
+  });
 </script>
 
 <main>
-	<h1>Ticket</h1>
-	<div class="TicketConatainer">
-		<div class="TitleOfTicket">
-			<input type="text" placeholder="Název Ticketu" class="TitleInput" />
-			<form>
-				<label for="TicketCategory"></label>
-				<select
-					name="TicketPriority"
-					id="TicketPriority"
-					onchange={(e) => selectedCategory = e.target.value}
-				>
-					<option value="" disabled selected>Vyber Kategorii</option>
-					<option value="Critical">Kritická</option>
-					<option value="High">Vysoká</option>
-					<option value="Medium">Střední</option>
-					<option value="Low">Nízká</option>
-					<option value="Trivial">Triviální</option>
-				</select>
-			</form>
-		</div>
+  <h1>Ticket</h1>
+  <div class="TicketConatainer">
+    <div class="TitleOfTicket">
+      <input
+        type="text"
+        placeholder="Název Ticketu"
+        class="TitleInput"
+        bind:value={title}
+      />
+      <select
+        name="TicketPriority"
+        id="TicketPriority"
+        required
+        bind:value={selectedCategory}
+      >
+        <option value="" disabled selected hidden>Vyber Kategorii</option>
+        <option value="Critical">Kritická</option>
+        <option value="High">Vysoká</option>
+        <option value="Medium">Střední</option>
+        <option value="Low">Nízká</option>
+        <option value="Trivial">Triviální</option>
+      </select>
+    </div>
 
-		{#if selectedCategory}
-			<div class="TicketDescription">
-				<textarea
-					name="TicketDescription"
-					id="TicketDescription"
-					cols="30"
-					rows="10"
-					placeholder="Zanechte popis ticketu nebo zprávu pro nás..."
-				></textarea>
-			</div>
-		{/if}
+    {#if selectedCategory}
+      <div class="TicketDescription">
+        <textarea
+          name="TicketDescription"
+          id="TicketDescription"
+          cols="30"
+          rows="10"
+          placeholder="Zanechte popis ticketu nebo zprávu pro nás..."
+          bind:value={description}
+        ></textarea>
+      </div>
+    {/if}
 
-		<div class="TicketButton">
-			<button type="submit" class="SubmitTicket">Odeslat Ticket</button>
-		</div>
-	</div>
+    <div class="TicketButton">
+      <button
+        type="submit"
+        class="SubmitTicket {isFormComplete ? 'active' : ''}"
+      >
+        Odeslat Ticket
+      </button>
+    </div>
+  </div>
 </main>
 
 <style>
+  main {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #484745;
+    color: #767475;
+    min-height: 599px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
 
+  h1 {
+    color: white;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  .TicketConatainer {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 540px;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .TitleOfTicket {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  select {
+    background-color: transparent;
+    border: 1px solid #767475;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 500px;
+    box-sizing: border-box;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%23767475' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 24px;
+
+    /* Default barva když je validní (něco vybráno) */
+    color: #767475;
+  }
+
+  /* Placeholder styl = první option je aktivní */
+  select:invalid {
+    color: #767475;
+  }
+
+  .TitleInput {
+    background-color: transparent;
+    border: 1px solid #767475;
+    padding: 12px 16px;
+    border-radius: 6px;
+    color: #ffffff; /* <- psaný text bude bílý */
+    font-size: 16px;
+    width: 500px;
+    box-sizing: border-box;
+  }
+
+  .TitleInput::placeholder {
+    color: #767475; /* <- placeholder zůstává šedý */
+    opacity: 1;
+  }
+
+  .TicketDescription {
+    margin-bottom: 20px;
+  }
+
+  textarea {
+    width: 369px;
+    padding: 16px;
+    border-radius: 10px;
+    border: none;
+    background-color: #151515;
+    color: #767475;
+    resize: vertical;
+    font-size: 16px;
+    min-height: 150px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+  }
+
+  textarea {
+    color: #ffffff;
+  }
+
+  textarea::placeholder {
+    color: #767475;
+    opacity: 1;
+  }
+
+  .TicketButton {
+    text-align: center;
+  }
+
+  .SubmitTicket {
+    background-color: #151515;
+    color: #767475;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+  }
+
+  .SubmitTicket:hover {
+    background-color: #232323;
+  }
 </style>
