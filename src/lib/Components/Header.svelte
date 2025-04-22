@@ -1,23 +1,28 @@
 <script lang="ts">
-  import { text } from "drizzle-orm/sqlite-core";
+  let isLoggedIn = $state(false); // V reálu tohle asi načítáš z cookies nebo session
+  let nickname = $state("Pepa"); // Taky třeba ze session nebo store
+
+  function logout() {
+    isLoggedIn = false;
+    nickname = "";
+  }
 </script>
 
 <header>
   <div class="Header-Section">
     <div class="Logo">
-      <h1>
-        <span class="concretum-light"
-          >Co<span class="concretum-bold">n</span>cret<span
-            class="concretum-bold">u</span
-          >m</span
-        >
-      </h1>
+      <a href="/"><h1><span class="concretum-light">Co<span class="concretum-bold">n</span>cret<span class="concretum-bold">u</span>m</span></h1></a>
     </div>
 
     <div class="Navigation">
       <nav>
-        <a href="./Login"><strong>Přihlasit</strong></a>
-        <a href="./Register"><strong>Registrovat</strong></a>
+        {#if isLoggedIn}
+          <span style="color: white;">Ahoj, {nickname}!</span>
+          <a href="/" onclick={logout}><strong>Odhlásit</strong></a>
+        {:else}
+          <a href="./Login"><strong>Přihlasit</strong></a>
+          <a href="./Register"><strong>Registrovat</strong></a>
+        {/if}
       </nav>
     </div>
   </div>
@@ -43,6 +48,10 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+  }
+
+.Logo, h1, a {
+    text-decoration: none; /* Pokud chceš odstranit podtržení */
   }
 
   .concretum-light {
