@@ -2,7 +2,7 @@
   let selectedCategory = $state("");
   let title = $state("");
   let description = $state("");
-  let isFormComplete = false;
+  let isFormComplete = $state(false);
 
   $effect(() => {
     isFormComplete =
@@ -53,7 +53,8 @@
     <div class="TicketButton">
       <button
         type="submit"
-        class="SubmitTicket {isFormComplete ? 'active' : ''}"
+        class="SubmitTicket"
+        class:CompleteReady={isFormComplete}
       >
         Odeslat Ticket
       </button>
@@ -182,7 +183,10 @@
     font-size: 16px;
   }
 
-  .SubmitTicket:hover {
-    background-color: #232323;
+  .SubmitTicket.CompleteReady {
+    background-color: #28a745; /* zelená */
+    color: white;
+    border: 2px solid #28a745;
+    transition: all 0.3s ease;
   }
 </style>
