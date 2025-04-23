@@ -3,6 +3,7 @@
   let title = $state("");
   let description = $state("");
   let isFormComplete = $state(false);
+  let isRegistered = $state(false);
 
   $effect(() => {
     isFormComplete =
@@ -10,6 +11,45 @@
       selectedCategory !== "" &&
       description.trim() !== "";
   });
+
+  async function submitTicket() {
+    if (!isFormComplete) return;
+
+    const ticketData = {
+      title,
+      category: selectedCategory,
+      description,
+    };
+
+    try {
+      const response = await fetch("/api/tickets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ticketData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Chyba při odesílání ticketu");
+      }
+
+      const result = await response.json();
+      console.log("Ticket byl úspěšně odeslán:", result);
+    } catch (error) {
+      console.error("Chyba:", error);
+    }
+  }
+
+  // Kontrola registrace uživatele přesměrování na login ale nechci to teď mít zaplé pokud to potřebuješ vyskouset odkomentuj to
+  // $effect(() => {
+  //   const flag = localStorage.getItem("isRegistered");
+  //   isRegistered = flag === "true";
+
+  //   if (!isRegistered) {
+  //     location.href = "/Login";
+  //   }
+  // });
 </script>
 
 <main>
@@ -55,6 +95,7 @@
         type="submit"
         class="SubmitTicket"
         class:CompleteReady={isFormComplete}
+        onclick={submitTicket}
       >
         Odeslat Ticket
       </button>

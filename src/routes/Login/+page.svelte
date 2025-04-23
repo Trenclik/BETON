@@ -8,6 +8,7 @@
   let errorMessage = $state("");
   let successMessage = $state("");
   let passwordVisible = $state(false);
+  
 
   function validateForm() {
     if (!usernameOrEmail || !password) {
@@ -31,8 +32,14 @@
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || "Přihlášení selhalo");
 
+      // ✅ Označ uživatele jako registrovaného
+      localStorage.setItem("isRegistered", "true");
+
       successMessage = "Přihlášení úspěšné!";
       errorMessage = "";
+
+      // ✅ Přesměruj uživatele na hlavní stránku
+      location.href = "/";
     } catch (error) {
       errorMessage = (error as Error).message;
     }
@@ -167,8 +174,6 @@
     align-items: center;
     margin-top: -30px;
   }
-
-
 
   @media (max-width: 1024px) {
     .Login-Section {
