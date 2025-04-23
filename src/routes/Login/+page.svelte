@@ -1,49 +1,48 @@
 <script lang="ts">
-  import { text } from "drizzle-orm/sqlite-core";
-  import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
-  import StylingPage from "$lib/Components/Styling-page.svelte";
+	import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
+	import StylingPage from "$lib/Components/Styling-page.svelte";
 
-  let usernameOrEmail = $state("");
-  let password = $state("");
-  let errorMessage = $state("");
-  let successMessage = $state("");
-  let passwordVisible = $state(false);
-  
+	let usernameOrEmail = "";
+	let password = "";
+	let errorMessage = "";
+	let successMessage = "";
+	let passwordVisible = false;
 
-  function validateForm() {
-    if (!usernameOrEmail || !password) {
-      errorMessage = "Všechna pole musí být vyplněna";
-      return false;
-    }
-    return true;
-  }
+	function validateForm() {
+		if (!usernameOrEmail || !password) {
+			errorMessage = "Všechna pole musí být vyplněna";
+			return false;
+		}
+		return true;
+	}
 
-  async function login(event: Event) {
-    event.preventDefault();
-    if (!validateForm()) return;
+	async function Login(event: Event) {
+		event.preventDefault();
+		if (!validateForm()) return;
 
-    try {
-      const response = await fetch("/login?/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ usernameOrEmail, password }),
-      });
+		try {
+			const formData = new FormData();
+			formData.append("usernameOrEmail", usernameOrEmail);
+			formData.append("password", password);
 
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.message || "Přihlášení selhalo");
+			const response = await fetch("/Login", {
+				method: "POST",
+				body: formData
+			});
 
-      // ✅ Označ uživatele jako registrovaného
-      localStorage.setItem("isRegistered", "true");
+			const result = await response.json();
+			if (!response.ok) throw new Error(result.message || "Přihlášení selhalo");
 
-      successMessage = "Přihlášení úspěšné!";
-      errorMessage = "";
+			localStorage.setItem("isRegistered", "true");
+			successMessage = "Přihlášení úspěšné!";
+			errorMessage = "";
 
-      // ✅ Přesměruj uživatele na hlavní stránku
-      location.href = "/";
-    } catch (error) {
-      errorMessage = (error as Error).message;
-    }
-  }
+			// přesměrování
+			// location.href = "/";
+		} catch (error) {
+			errorMessage = (error as Error).message;
+		}
+	}
 </script>
 
 <StylingPage />
@@ -68,7 +67,7 @@
       <a href="./ForgetPassword"><strong>Zapomenuté heslo</strong></a>
     </div>
 
-    <button type="submit" onclick={login}>
+    <button type="submit" onclick={Login}>
       <strong>Přihlásit se</strong>
     </button>
 
@@ -82,7 +81,7 @@
   </div>
 
   <div class="Register-Container">
-    <p>Nematé učet? <a href="./Register">Registrovat se</a></p>
+    <p>Nemáte učet? <a href="./Register">Registrovat se</a></p>
   </div>
 </main>
 
