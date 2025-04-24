@@ -2,10 +2,28 @@
   let isRegistered = $state(false);
   let isAdmin = $state(false);
   let activeTab = $state("tickets");
-  let firstName = $state(localStorage.getItem("firstName") || "");
-  let lastName = $state(localStorage.getItem("lastName") || "");
-  let email = $state(localStorage.getItem("email") || "");
-  let nickname = $state(localStorage.getItem("nickname") || "");
+  let ticketFilter = $state("vse"); // přidaný stav pro filtr
+
+  let firstName = $state("");
+  let lastName = $state("");
+  let email = $state("");
+  let nickname = $state("");
+
+  $effect(() => {
+    if (typeof localStorage !== "undefined") {
+      firstName = localStorage.getItem("firstName") || "";
+      lastName = localStorage.getItem("lastName") || "";
+      email = localStorage.getItem("email") || "";
+      nickname = localStorage.getItem("nickname") || "";
+
+      isRegistered = localStorage.getItem("isRegistered") === "true";
+      isAdmin = localStorage.getItem("isAdmin") === "true";
+
+      if (!isRegistered) {
+        location.href = "/Login";
+      }
+    }
+  });
 
   function saveProfile() {
     localStorage.setItem("firstName", firstName);
@@ -14,15 +32,6 @@
     localStorage.setItem("nickname", nickname);
     alert("Profil uložen");
   }
-
-  $effect(() => {
-    isRegistered = localStorage.getItem("isRegistered") === "true";
-    isAdmin = localStorage.getItem("isAdmin") === "true";
-
-    if (!isRegistered) {
-      location.href = "/Login";
-    }
-  });
 
   function logout() {
     localStorage.removeItem("isRegistered");
@@ -58,12 +67,26 @@
   {#if activeTab === "tickets"}
     <section>
       <h2>Tvoje tickety</h2>
+      {#if isAdmin}
+        <label for="filter">Filtrovat podle stavu:</label>
+        <select id="filter" bind:value={ticketFilter}>
+          <option value="vse">Vše</option>
+          <option value="hotovo">Hotovo</option>
+          <option value="rozpracovano">Rozpracováno</option>
+          <option value="nedokonceny">Nedokončený</option>
+        </select>
+      {/if}
       <p>Zatím tu žádné nemáš, nebo je tu třeba načíst z backendu.</p>
     </section>
   {:else if activeTab === "profile"}
     <section>
       <h2>Úprava profilu</h2>
-      <form onsubmit={event => { event.preventDefault(); saveProfile(); }}>
+      <form
+        onsubmit={(event) => {
+          event.preventDefault();
+          saveProfile();
+        }}
+      >
         <label>
           Jméno:
           <input bind:value={firstName} type="text" />
@@ -93,9 +116,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #eeeeee; /* světle šedé pozadí */
-    color: #333;
-    font-family: system-ui, sans-serif;
+    background-color: #1e1e1e; /* tmavé pozadí */
+    color: #f0f0f0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  main.is-admin {
+    background-color: #232323;
   }
 
   nav.menu {
@@ -109,60 +136,153 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    background-color: #cccccc; /* neutrální šedá */
-    transition: background-color 0.2s;
+    background-color: #333;
+    color: white;
     font-weight: 500;
-  }
-
-  nav.menu button.active {
-    background-color: #2ecc71; /* zelená */
-    color: white;
-  }
-
-  nav.menu button.logout {
-    background-color: #95a5a6; /* šedozelená pro méně důležité akce */
-    color: white;
+    transition: all 0.2s ease;
   }
 
   nav.menu button:hover {
-    background-color: #bfbfbf;
+    background-color: #444;
+  }
+
+  nav.menu button.active {
+    background-color: #28a745;
+    color: white;
   }
 
   nav.menu button.active:hover {
-    background-color: #27ae60; /* tmavší zelená */
+    background-color: #218838;
+  }
+
+  nav.menu button.logout {
+    background-color: #6c757d;
   }
 
   nav.menu button.logout:hover {
-    background-color: #7f8c8d;
+    background-color: red;
   }
 
   h1,
   h2 {
     font-size: 2rem;
-    color: #2c3e50;
+    color: #ffffff;
     margin-bottom: 10px;
   }
 
   p {
     margin-top: 10px;
     font-size: 1.1rem;
+    color: #aaa;
   }
 
   section {
-    background: white;
+    background: #2a2a2a;
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
     width: 100%;
     max-width: 600px;
     text-align: center;
+    margin-bottom: 30px;
+
+  }
+
+  form label {
+    display: block;
+    margin-bottom: 15px;
+    color: #ddd;
+    text-align: left;
+  }
+
+  form input {
+    width: 100%;
+    padding: 12px 0px 12px 12px; /* nahoře, vpravo, dole, vlevo */
+    border-radius: 6px;
+    border: 1px solid #555;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
+  form input::placeholder {
+    color: #777;
+  }
+
+  form button[type="submit"] {
+    padding: 14px 24px;
+    min-height: 48px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  form button[type="submit"]:hover {
+    background-color: #218838;
+  }
+
+  form button[type="submit"]:hover {
+    background-color: #218838;
   }
 
   .admin-profile {
-    border: 2px dashed #2ecc71;
+    border: 2px dashed #28a745;
   }
 
-  main.is-admin {
-    background-color: #f9f9f9;
+  @media (max-width: 768px) {
+    main {
+      padding: 20px;
+    }
+
+    nav.menu {
+      flex-direction: column;
+      width: 100%;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    nav.menu button {
+      width: 100%;
+      text-align: center;
+    }
+
+    section {
+      padding: 12px;
+      border-radius: 10px;
+      max-width: 100%;
+    }
+
+    form label {
+      font-size: 0.95rem;
+    }
+
+    form input,
+    form button[type="submit"] {
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1,
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+
+    form input,
+    form button[type="submit"] {
+      padding: 10px 0px 10px 10px;
+    }
   }
 </style>

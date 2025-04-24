@@ -1,12 +1,15 @@
 <script lang="ts">
-	let isLoggedIn = $state(localStorage.getItem("isRegistered") === "true");
+	let isLoggedIn = $state(false);
+	let fullName = $state("Uživatel");
 
-	let nickname = $derived.by(() => {
-		const nick = localStorage.getItem("nickname");
-		if (nick && nick.trim().length > 0) return nick;
-		const first = localStorage.getItem("firstName");
-		const last = localStorage.getItem("lastName");
-		return `${first || ""} ${last || ""}`.trim() || "Uživatel";
+	$effect(() => {
+		if (typeof localStorage !== "undefined") {
+			isLoggedIn = localStorage.getItem("isRegistered") === "true";
+
+			const first = localStorage.getItem("firstName");
+			const last = localStorage.getItem("lastName");
+			fullName = `${first || ""} ${last || ""}`.trim() || "Uživatel";
+		}
 	});
 
 	function logout() {
@@ -33,8 +36,9 @@
 		<div class="Navigation">
 			<nav>
 				{#if isLoggedIn}
-					<span style="color: white;">Ahoj, {nickname}!</span>
-					<a href="/" onclick={logout}><strong>Odhlásit</strong></a>
+					<span style="color: white;">
+						Ahoj, <a href="/Profile" style="color: white; text-decoration: underline;">{fullName}</a>!
+					</span>
 				{:else}
 					<a href="/Login"><strong>Přihlásit</strong></a>
 					<a href="/Register"><strong>Registrovat</strong></a>
@@ -43,6 +47,7 @@
 		</div>
 	</div>
 </header>
+
 
 <style>
 	.Header-Section {

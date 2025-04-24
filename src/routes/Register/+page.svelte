@@ -1,98 +1,111 @@
 <script lang="ts">
-	import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
-	import StylingPage from "$lib/Components/Styling-page.svelte";
+  import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
+  import StylingPage from "$lib/Components/Styling-page.svelte";
 
-	let name = "";
-	let surname = "";
-	let email = "";
-	let password = "";
-	let confirmPassword = "";
-	let errorMessage = "";
+  let name = "";
+  let surname = "";
+  let email = "";
+  let password = "";
+  let confirmPassword = "";
+  let errorMessage = "";
   let successMessage = "";
-	let passwordVisible = false;
-	let confirmPasswordVisible = false;
-	let agreedToTerms = false;
+  let passwordVisible = false;
+  let confirmPasswordVisible = false;
+  let agreedToTerms = false;
 
-	function validateForm() {
-		if (!name || !surname || !email || !password || !confirmPassword) {
-			errorMessage = "Všechna pole musí být vyplněna.";
-			return false;
-		}
-		if (password.length < 8) {
-			errorMessage = "Heslo musí mít alespoň 8 znaků.";
-			return false;
-		}
-		if (password !== confirmPassword) {
-			errorMessage = "Hesla se neshodují.";
-			return false;
-		}
-		if (!agreedToTerms) {
-			errorMessage = "Musíte souhlasit s podmínkami.";
-			return false;
-		}
-		errorMessage = "";
-		return true;
-	}
+  function validateForm() {
+    if (!name || !surname || !email || !password || !confirmPassword) {
+      errorMessage = "Všechna pole musí být vyplněna.";
+      return false;
+    }
+    if (password.length < 8) {
+      errorMessage = "Heslo musí mít alespoň 8 znaků.";
+      return false;
+    }
+    if (password !== confirmPassword) {
+      errorMessage = "Hesla se neshodují.";
+      return false;
+    }
+    if (!agreedToTerms) {
+      errorMessage = "Musíte souhlasit s podmínkami.";
+      return false;
+    }
+    errorMessage = "";
+    return true;
+  }
 
-	async function register(event: Event) {
-		event.preventDefault();
-		if (!validateForm()) return;
-		try {
-			const response = await fetch("/Register", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ name, surname, email, password }),
-			});
-			const data = await response.json();
-			if (!response.ok) throw new Error(data.message || "Registrace selhala");
-			successMessage = "Registrace úspěšná!";
-		} catch (error) {
-			errorMessage = (error as Error).message;
-		}
-	}
+  async function register(event: Event) {
+    event.preventDefault();
+    if (!validateForm()) return;
+
+    try {
+      const response = await fetch("/Register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, surname, email, password }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Registrace selhala");
+
+      // ✅ ULOŽENÍ DO LOCALSTORAGE
+      localStorage.setItem("isRegistered", "true");
+      localStorage.setItem("firstName", name);
+      localStorage.setItem("lastName", surname);
+      localStorage.setItem("email", email);
+
+      // ✅ PŘESMĚROVÁNÍ NA HLAVNÍ STRÁNKU
+      location.href = "/";
+    } catch (error) {
+      errorMessage = (error as Error).message;
+    }
+  }
 </script>
 
 <StylingPage />
-
+  
 <main>
-	<form class="Register-Container" on:submit={register}>
-		<input type="text" placeholder="Jméno" bind:value={name} />
-		<input type="text" placeholder="Příjmení" bind:value={surname} />
-		<input type="email" placeholder="Email" bind:value={email} />
+  <form class="Register-Container" on:submit={register}>
+    <input type="text" placeholder="Jméno" bind:value={name} />
+    <input type="text" placeholder="Příjmení" bind:value={surname} />
+    <input type="email" placeholder="Email" bind:value={email} />
 
-		<div class="Password-Container">
-			<input
-				type={passwordVisible ? "text" : "password"}
-				placeholder="Heslo"
-				bind:value={password}
-			/>
-			<ShowHideButton bind:visible={passwordVisible} class="show-hide-icon" />
-		</div>
+    <div class="Password-Container">
+      <input
+        type={passwordVisible ? "text" : "password"}
+        placeholder="Heslo"
+        bind:value={password}
+      />
+      <ShowHideButton bind:visible={passwordVisible} class="show-hide-icon" />
+    </div>
 
-		<div class="Password-Container">
-			<input
-				type={confirmPasswordVisible ? "text" : "password"}
-				placeholder="Potvrzení hesla"
-				bind:value={confirmPassword}
-			/>
-			<ShowHideButton bind:visible={confirmPasswordVisible} class="show-hide-icon" />
-		</div>
+    <div class="Password-Container">
+      <input
+        type={confirmPasswordVisible ? "text" : "password"}
+        placeholder="Potvrzení hesla"
+        bind:value={confirmPassword}
+      />
+      <ShowHideButton
+        bind:visible={confirmPasswordVisible}
+        class="show-hide-icon"
+      />
+    </div>
 
-		<div class="checkbox-container">
-			<input type="checkbox" bind:checked={agreedToTerms} class="checkbox" />
-			<p>Souhlasím s <strong><a href="/">podmínkami</a></strong></p>
-		</div>
+    <div class="checkbox-container">
+      <input type="checkbox" bind:checked={agreedToTerms} class="checkbox" />
+      <p>Souhlasím s <strong><a href="/">podmínkami</a></strong></p>
+    </div>
 
-		<button type="submit"><strong>Registrovat se</strong></button>
+    <button type="submit"><strong>Registrovat se</strong></button>
 
-		{#if errorMessage}
-			<p class="error">{errorMessage}</p>
-		{/if}
+    {#if errorMessage}
+      <p class="error">{errorMessage}</p>
+    {/if}
 
     {#if successMessage}
       <p class="success">{successMessage}</p>
     {/if}
-	</form>
+  </form>
 </main>
 
 <style>

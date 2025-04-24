@@ -38,7 +38,14 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			maxAge: 60 * 60 * 24 * 7 // 7 dní
 		});
         
-		return json({ message: 'Přihlášení úspěšné' }, { status: 200 });
+		return json({
+			message: 'Přihlášení úspěšné',
+			isAdmin: !!user.admin,           // převedeme číslo na boolean
+			firstName: user.name,            // použijeme správné jméno
+			lastName: user.sname,            // a příjmení
+		  }, { status: 200 });
+		  
+		  
 	} catch (err) {
 		console.error(err);
 		return json({ message: 'Chyba serveru při přihlašování.' }, { status: 500 });

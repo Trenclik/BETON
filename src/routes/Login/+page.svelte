@@ -31,18 +31,23 @@
       });
 
       const result = await response.json();
+      console.log("Login response result:", result);
       if (!response.ok) throw new Error(result.message || "Přihlášení selhalo");
 
-      // ✅ Ukládáme info o přihlášení a roli do localStorage
+      // ✅ Uložíme vše do localStorage
       localStorage.setItem("isRegistered", "true");
       localStorage.setItem("isAdmin", result.isAdmin ? "true" : "false");
+
+      // ✅ Doplnit jméno a příjmení — musíš je dostat od backendu!
+      localStorage.setItem("firstName", result.firstName || "");
+      localStorage.setItem("lastName", result.lastName || "");
 
       successMessage = "Přihlášení úspěšné!";
       errorMessage = "";
 
-      // ✅ Přesměrování podle role
+      // ✅ Přesměrování
       if (result.isAdmin) {
-        location.href = "/AdminPanel"; // nebo kamkoliv chceš
+        location.href = "/AdminPanel";
       } else {
         location.href = "/Profile";
       }
