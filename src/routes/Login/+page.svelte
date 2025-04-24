@@ -2,14 +2,14 @@
   import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
   import StylingPage from "$lib/Components/Styling-page.svelte";
 
-  let usernameOrEmail = "";
+  let email = "";
   let password = "";
   let errorMessage = "";
   let successMessage = "";
   let passwordVisible = false;
 
   function validateForm() {
-    if (!usernameOrEmail || !password) {
+    if (!email || !password) {
       errorMessage = "Všechna pole musí být vyplněna";
       return false;
     }
@@ -22,7 +22,7 @@
 
     try {
       const formData = new FormData();
-      formData.append("usernameOrEmail", usernameOrEmail);
+      formData.append("email", email);
       formData.append("password", password);
 
       const response = await fetch("/Login", {
@@ -58,8 +58,8 @@
     <input
       class="UserName"
       type="text"
-      placeholder="Uživatelské jméno"
-      bind:value={usernameOrEmail}
+      placeholder="E-mail"
+      bind:value={email}
     />
     <div class="PasswordContainer">
       <input

@@ -3,7 +3,7 @@
   import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
   import StylingPage from "$lib/Components/Styling-page.svelte";
 
-  let username = $state("");
+  let name = $state("");
   let email = $state("");
   let phone = $state("");
   let password = $state("");
@@ -11,9 +11,9 @@
   let errorMessage = $state("");
   let passwordVisible = $state(false);
   let confirmPasswordVisible = $state(false);
-
+  let surname = $state("")
   function validateForm() {
-    if (!username || !email || !password || !confirmPassword) {
+    if (!name || !surname || !email || !password || !confirmPassword) {
       errorMessage = "Všechna pole musí být vyplněna.";
       return false;
     }
@@ -36,7 +36,7 @@
       const response = await fetch("https://tvuj-backend.com/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, phone, password }),
+        body: JSON.stringify({ name, email, phone, password }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Registrace selhala");
@@ -51,7 +51,8 @@
 
 <main>
   <div class="Register-Container">
-    <input type="text" placeholder="Uživatelské jméno" bind:value={username} />
+    <input type="text" placeholder="Jméno" bind:value={name} />
+    <input type="text" placeholder="Příjmení" bind:value={surname} />
     <input type="email" placeholder="Email" bind:value={email} />
 
     <div class="Password-Container">

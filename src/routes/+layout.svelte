@@ -1,4 +1,3 @@
-<!-- src/routes/+layout.svelte -->
 <script lang="ts">
     import Header from "$lib/Components/Header.svelte";
     import { page } from '$app/stores'; // importujeme store pro sledování URL
