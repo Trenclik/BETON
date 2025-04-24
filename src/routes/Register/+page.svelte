@@ -8,6 +8,7 @@
 	let password = "";
 	let confirmPassword = "";
 	let errorMessage = "";
+  let successMessage = "";
 	let passwordVisible = false;
 	let confirmPasswordVisible = false;
 	let agreedToTerms = false;
@@ -44,7 +45,7 @@
 			});
 			const data = await response.json();
 			if (!response.ok) throw new Error(data.message || "Registrace selhala");
-			alert("Registrace úspěšná!");
+			successMessage = "Registrace úspěšná!";
 		} catch (error) {
 			errorMessage = (error as Error).message;
 		}
@@ -87,6 +88,10 @@
 		{#if errorMessage}
 			<p class="error">{errorMessage}</p>
 		{/if}
+
+    {#if successMessage}
+      <p class="success">{successMessage}</p>
+    {/if}
 	</form>
 </main>
 
@@ -161,7 +166,11 @@
     margin-top: 10px;
     font-size: 14px;
   }
-
+  .success {
+    color: #1e8a25;
+    margin-top: 10px;
+    font-size: 14px;
+  }
   @media (max-width: 480px) {
     .Register-Container {
       height: 642px;
