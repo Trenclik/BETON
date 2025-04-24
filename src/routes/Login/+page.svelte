@@ -44,7 +44,7 @@
       if (result.isAdmin) {
         location.href = "/AdminPanel"; // nebo kamkoliv chceš
       } else {
-        location.href = "/Profil";
+        location.href = "/Profile";
       }
     } catch (error) {
       errorMessage = (error as Error).message;
