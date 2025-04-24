@@ -4,12 +4,25 @@
   let description = $state("");
   let isFormComplete = $state(false);
   let isRegistered = $state(false);
+  let isAdmin = $state(false);
 
   $effect(() => {
     isFormComplete =
       title.trim() !== "" &&
       selectedCategory !== "" &&
       description.trim() !== "";
+  });
+
+  $effect(() => {
+    const regFlag = localStorage.getItem("isRegistered");
+    isRegistered = regFlag === "true";
+
+    const adminFlag = localStorage.getItem("isAdmin");
+    isAdmin = adminFlag === "true";
+
+    if (!isRegistered) {
+      location.href = "/Login";
+    }
   });
 
   async function submitTicket() {
@@ -41,66 +54,63 @@
     }
   }
 
-  // Kontrola registrace uživatele přesměrování na login ale nechci to teď mít zaplé pokud to potřebuješ vyskouset odkomentuj to
-  // $effect(() => {
-  //   const flag = localStorage.getItem("isRegistered");
-  //   isRegistered = flag === "true";
-
-  //   if (!isRegistered) {
-  //     location.href = "/Login";
-  //   }
-  // });
+  //Kontrola registrace uživatele přesměrování na login ale nechci to teď mít zaplé pokud to potřebuješ vyskouset odkomentuj to
 </script>
 
 <main>
-  <h1>Ticket</h1>
-  <div class="TicketConatainer">
-    <div class="TitleOfTicket">
-      <input
-        type="text"
-        placeholder="Název Ticketu"
-        class="TitleInput"
-        bind:value={title}
-      />
-      <select
-        name="TicketPriority"
-        id="TicketPriority"
-        required
-        bind:value={selectedCategory}
-      >
-        <option value="" disabled selected hidden>Vyber Kategorii</option>
-        <option value="Critical">Kritická</option>
-        <option value="High">Vysoká</option>
-        <option value="Medium">Střední</option>
-        <option value="Low">Nízká</option>
-        <option value="Trivial">Triviální</option>
-      </select>
-    </div>
-
-    {#if selectedCategory}
-      <div class="TicketDescription">
-        <textarea
-          name="TicketDescription"
-          id="TicketDescription"
-          cols="30"
-          rows="10"
-          placeholder="Zanechte popis ticketu nebo zprávu pro nás..."
-          bind:value={description}
-        ></textarea>
+  {#if isAdmin}
+    <h1>Admin Panel</h1>
+    <p>Zde budou například seznamy ticketů nebo správa uživatelů</p>
+  {:else}
+    <h1>Ticket</h1>
+    <div class="TicketConatainer">
+      <div class="TitleOfTicket">
+        <input
+          type="text"
+          placeholder="Název Ticketu"
+          class="TitleInput"
+          bind:value={title}
+        />
+        <select
+          name="TicketPriority"
+          id="TicketPriority"
+          required
+          bind:value={selectedCategory}
+        >
+          <option value="" disabled selected hidden>Vyber Kategorii</option>
+          <option value="Critical">Kritická</option>
+          <option value="High">Vysoká</option>
+          <option value="Medium">Střední</option>
+          <option value="Low">Nízká</option>
+          <option value="Trivial">Triviální</option>
+        </select>
       </div>
-    {/if}
 
-    <div class="TicketButton">
-      <button
-        type="submit"
-        class="SubmitTicket"
-        class:CompleteReady={isFormComplete}
-        onclick={submitTicket}
-      >
-        Odeslat Ticket
-      </button>
+      {#if selectedCategory}
+        <div class="TicketDescription">
+          <textarea
+            name="TicketDescription"
+            id="TicketDescription"
+            cols="30"
+            rows="10"
+            placeholder="Zanechte popis ticketu nebo zprávu pro nás..."
+            bind:value={description}
+          ></textarea>
+        </div>
+      {/if}
+
+      <div class="TicketButton">
+        <button
+          type="submit"
+          class="SubmitTicket"
+          class:CompleteReady={isFormComplete}
+          onclick={submitTicket}
+        >
+          Odeslat Ticket
+        </button>
+      </div>
     </div>
-  </div>
+  {/if}
 </main>
 
 <style>

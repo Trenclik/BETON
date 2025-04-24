@@ -1,48 +1,55 @@
 <script lang="ts">
-	import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
-	import StylingPage from "$lib/Components/Styling-page.svelte";
+  import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
+  import StylingPage from "$lib/Components/Styling-page.svelte";
 
-	let usernameOrEmail = "";
-	let password = "";
-	let errorMessage = "";
-	let successMessage = "";
-	let passwordVisible = false;
+  let usernameOrEmail = "";
+  let password = "";
+  let errorMessage = "";
+  let successMessage = "";
+  let passwordVisible = false;
 
-	function validateForm() {
-		if (!usernameOrEmail || !password) {
-			errorMessage = "Všechna pole musí být vyplněna";
-			return false;
-		}
-		return true;
-	}
+  function validateForm() {
+    if (!usernameOrEmail || !password) {
+      errorMessage = "Všechna pole musí být vyplněna";
+      return false;
+    }
+    return true;
+  }
 
-	async function Login(event: Event) {
-		event.preventDefault();
-		if (!validateForm()) return;
+  async function Login(event: Event) {
+    event.preventDefault();
+    if (!validateForm()) return;
 
-		try {
-			const formData = new FormData();
-			formData.append("usernameOrEmail", usernameOrEmail);
-			formData.append("password", password);
+    try {
+      const formData = new FormData();
+      formData.append("usernameOrEmail", usernameOrEmail);
+      formData.append("password", password);
 
-			const response = await fetch("/Login", {
-				method: "POST",
-				body: formData
-			});
+      const response = await fetch("/Login", {
+        method: "POST",
+        body: formData,
+      });
 
-			const result = await response.json();
-			if (!response.ok) throw new Error(result.message || "Přihlášení selhalo");
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Přihlášení selhalo");
 
-			localStorage.setItem("isRegistered", "true");
-			successMessage = "Přihlášení úspěšné!";
-			errorMessage = "";
+      // ✅ Ukládáme info o přihlášení a roli do localStorage
+      localStorage.setItem("isRegistered", "true");
+      localStorage.setItem("isAdmin", result.isAdmin ? "true" : "false");
 
-			// přesměrování
-			// location.href = "/";
-		} catch (error) {
-			errorMessage = (error as Error).message;
-		}
-	}
+      successMessage = "Přihlášení úspěšné!";
+      errorMessage = "";
+
+      // ✅ Přesměrování podle role
+      if (result.isAdmin) {
+        location.href = "/AdminPanel"; // nebo kamkoliv chceš
+      } else {
+        location.href = "/Profil";
+      }
+    } catch (error) {
+      errorMessage = (error as Error).message;
+    }
+  }
 </script>
 
 <StylingPage />
