@@ -3,9 +3,11 @@ import type { RequestHandler } from './$types';
 import { db } from '$lib/server/db';
 import { usersTable } from '$lib/server/db/schema';
 import bcrypt from 'bcryptjs';
+import { eq } from "drizzle-orm";
+
 
 export const POST: RequestHandler = async ({ request }) => { 
-    try { const body = await request.json(); const { name, surname, email, phone, password } = body;
+    try { const body = await request.json(); const { name, surname, email, password } = body;
         // Basic validation
         if (!name || !surname || !email || !password) {
             return json({ message: 'Všechna pole musí být vyplněna.' }, { status: 400 });
@@ -19,7 +21,7 @@ export const POST: RequestHandler = async ({ request }) => {
         const existingUser = await db
             .select()
             .from(usersTable)
-            .where(usersTable.email === email)
+            .where(eq(usersTable.email, email))
             .get();
 
         if (existingUser) {
@@ -39,7 +41,6 @@ export const POST: RequestHandler = async ({ request }) => {
             isMSLoggedIn: 0,
             isEmailVerified: 0,
             isOnline: 0
-            // phone is not in schema, so we don't insert it unless added
         });
 
         return json({ message: 'Registrace úspěšná!' }, { status: 200 });

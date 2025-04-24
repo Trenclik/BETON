@@ -1,16 +1,16 @@
 import { json } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { usersTable } from '$lib/server/db/schema';
-import { eq, or } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const formData = await request.formData();
-	const usernameOrEmail = formData.get('usernameOrEmail')?.toString() || '';
+	const email = formData.get('email')?.toString() || '';
 	const password = formData.get('password')?.toString() || '';
 
-	if (!usernameOrEmail || !password) {
+	if (!email || !password) {
 		return json({ message: 'Chybí přihlašovací údaje.' }, { status: 400 });
 	}
 
@@ -18,12 +18,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		const [user] = await db
 			.select()
 			.from(usersTable)
-			.where(
-				or(
-					eq(usersTable.email, usernameOrEmail),
-					eq(usersTable.name, usernameOrEmail)
-				)
-			);
+			.where(eq(usersTable.email, email));
 
 		if (!user) {
 			return json({ message: 'Uživatel nebyl nalezen.' }, { status: 401 });
@@ -34,7 +29,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			return json({ message: 'Neplatné heslo.' }, { status: 401 });
 		}
 
-		// ✅ Nastavení cookie
+		// Nastavení cookie
 		cookies.set('userId', user.id.toString(), {
 			path: '/',
 			httpOnly: true,
