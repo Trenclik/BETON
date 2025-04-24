@@ -14,7 +14,6 @@
       firstName = localStorage.getItem("firstName") || "";
       lastName = localStorage.getItem("lastName") || "";
       email = localStorage.getItem("email") || "";
-      nickname = localStorage.getItem("nickname") || "";
 
       isRegistered = localStorage.getItem("isRegistered") === "true";
       isAdmin = localStorage.getItem("isAdmin") === "true";
@@ -29,7 +28,6 @@
     localStorage.setItem("firstName", firstName);
     localStorage.setItem("lastName", lastName);
     localStorage.setItem("email", email);
-    localStorage.setItem("nickname", nickname);
     alert("Profil uložen");
   }
 
@@ -98,10 +96,6 @@
         <label>
           Email:
           <input bind:value={email} type="email" />
-        </label>
-        <label>
-          Přezdívka (nepovinné):
-          <input bind:value={nickname} type="text" />
         </label>
         <button type="submit">Uložit</button>
       </form>

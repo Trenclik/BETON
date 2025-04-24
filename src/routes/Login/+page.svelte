@@ -34,18 +34,18 @@
       console.log("Login response result:", result);
       if (!response.ok) throw new Error(result.message || "Přihlášení selhalo");
 
-      // ✅ Uložíme vše do localStorage
+      // Uložíme vše do localStorage
       localStorage.setItem("isRegistered", "true");
       localStorage.setItem("isAdmin", result.isAdmin ? "true" : "false");
 
-      // ✅ Doplnit jméno a příjmení — musíš je dostat od backendu!
+      // Doplnit jméno a příjmení — musíš je dostat od backendu!
       localStorage.setItem("firstName", result.firstName || "");
       localStorage.setItem("lastName", result.lastName || "");
 
       successMessage = "Přihlášení úspěšné!";
       errorMessage = "";
 
-      // ✅ Přesměrování
+      // Přesměrování
       location.href = "/Profile";
     } catch (error) {
       errorMessage = (error as Error).message;
