@@ -46,11 +46,7 @@
       errorMessage = "";
 
       // ✅ Přesměrování
-      if (result.isAdmin) {
-        location.href = "/AdminPanel";
-      } else {
-        location.href = "/Profile";
-      }
+      location.href = "/Profile";
     } catch (error) {
       errorMessage = (error as Error).message;
     }
