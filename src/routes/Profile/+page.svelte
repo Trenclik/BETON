@@ -1,31 +1,53 @@
 <script>
 	let isRegistered = $state(false);
 	let isAdmin = $state(false);
+	let activeTab = $state("tickets");
 
 	$effect(() => {
-		const regFlag = localStorage.getItem("isRegistered");
-		isRegistered = regFlag === "true";
-
-		const adminFlag = localStorage.getItem("isAdmin");
-		isAdmin = adminFlag === "true";
+		isRegistered = localStorage.getItem("isRegistered") === "true";
+		isAdmin = localStorage.getItem("isAdmin") === "true";
 
 		if (!isRegistered) {
-			location.href = "/Login"; // nebo kam chceš poslat neregistrované
+			location.href = "/Login";
 		}
 	});
+
+	function logout() {
+		localStorage.removeItem("isRegistered");
+		localStorage.removeItem("isAdmin");
+		location.href = "/Login";
+	}
 </script>
 
 <main class:is-admin={isAdmin}>
+	<nav class="menu">
+		<button class:active={activeTab === 'tickets'} onclick={() => (activeTab = 'tickets')}>
+			Tickety
+		</button>
+		<button class:active={activeTab === 'profile'} onclick={() => (activeTab = 'profile')}>
+			Upravit profil
+		</button>
+		<button class="logout" onclick={logout}>
+			Odhlásit se
+		</button>
+	</nav>
+
 	{#if isAdmin}
 		<section class="admin-profile">
 			<h1>Admin Profil</h1>
-			<p>Vítej zpět, administrátore. Zde máš přístup k nastavení, správě uživatelů a reportům.</p>
-			<!-- Můžeš přidat další komponenty nebo sekce -->
+			<p>Vítej zpět, administrátore.</p>
 		</section>
-	{:else}
-		<section class="user-profile">
-			<h1>Profil Uživatele</h1>
-			<p>Ahoj! Tady si můžeš upravit svůj účet nebo si zobrazit své tickety.</p>
+	{/if}
+
+	{#if activeTab === 'tickets'}
+		<section>
+			<h2>Tvoje tickety</h2>
+			<p>Zatím tu žádné nemáš, nebo je tu třeba načíst z backendu.</p>
+		</section>
+	{:else if activeTab === 'profile'}
+		<section>
+			<h2>Úprava profilu</h2>
+			<p>Tady můžeš editovat svoje osobní údaje.</p>
 		</section>
 	{/if}
 </main>
@@ -41,7 +63,31 @@
 		color: #333;
 	}
 
-	h1 {
+	nav.menu {
+		display: flex;
+		gap: 10px;
+		margin-bottom: 30px;
+	}
+
+	nav.menu button {
+		padding: 10px 20px;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;
+		background-color: #ddd;
+	}
+
+	nav.menu button.active {
+		background-color: #3498db;
+		color: white;
+	}
+
+	nav.menu button.logout {
+		background-color: #e74c3c;
+		color: white;
+	}
+
+	h1, h2 {
 		font-size: 2rem;
 		color: #2c3e50;
 	}
@@ -56,16 +102,6 @@
 		padding: 30px;
 		border-radius: 12px;
 		background-color: #fff5f5;
-		width: 100%;
-		max-width: 600px;
-		text-align: center;
-	}
-
-	.user-profile {
-		border: 2px solid #3498db;
-		padding: 30px;
-		border-radius: 12px;
-		background-color: #f0f8ff;
 		width: 100%;
 		max-width: 600px;
 		text-align: center;
