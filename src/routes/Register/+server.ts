@@ -39,7 +39,7 @@ export const POST: RequestHandler = async ({ request }) => {
             passwordHash,
             admin: 0,
             isMSLoggedIn: 0,
-            isEmailVerified: 0,
+            isEmailVerified: 1,
             isOnline: 0
         });
 
