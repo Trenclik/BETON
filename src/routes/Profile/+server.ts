@@ -4,14 +4,24 @@ import { ticketTable } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import type { RequestHandler } from "./$types";
 
-export const POST: RequestHandler = async ({ cookies }) => {
+export const POST: RequestHandler = async ({ request, cookies }) => {
     try{
+        const { isAdmin } = await request.json();
         let userId = Number(cookies.get("userId"))
-        const tickets = await db
-            .select()
-            .from(ticketTable)
-            .where(eq(ticketTable.uid, userId))
-            .all()
+        let tickets
+        if (isAdmin) {
+            tickets = await db
+                .select()
+                .from(ticketTable)
+                .all()
+        } else {
+            tickets = await db
+                .select()
+                .from(ticketTable)
+                .where(eq(ticketTable.uid, userId))
+                .all()
+        }
+        
         return json({
             message: "Načtení ticketů úspěšné!",
             body: JSON.stringify(tickets)

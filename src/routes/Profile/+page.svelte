@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { error } from "@sveltejs/kit";
+  import { error, json } from "@sveltejs/kit";
 
   let isRegistered = $state(false);
   let isAdmin = $state(false);
@@ -48,6 +48,7 @@
       const response = await fetch("/Profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isAdmin })
       });
 
       const result = await response.json();
@@ -123,6 +124,8 @@
           <div
             class={`ticket ${ticket.category.toLowerCase()} ${isExpanded(ticket.id) ? "expanded" : ""}`}
           >
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
             <div class="ticket-header" onclick={() => toggleTicket(ticket.id)}>
               <p><strong>{ticket.title}</strong></p>
               <span>{isExpanded(ticket.id) ? "−" : "+"}</span>
