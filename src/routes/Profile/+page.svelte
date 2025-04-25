@@ -68,7 +68,7 @@
     localStorage.setItem("firstName", firstName);
     localStorage.setItem("lastName", lastName);
     localStorage.setItem("email", email);
-    alert("Profil uložen");
+    location.href = "/Profile";
   }
 
   function logout() {
@@ -174,7 +174,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #1e1e1e; /* tmavé pozadí */
+    background-color: #1e1e1e;
     color: #f0f0f0;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
@@ -259,125 +259,15 @@
     font-size: 0.95rem;
     font-weight: 500;
     color: #fff;
-  }
-
-  .ticket.triviální {
-    background-color: #6c757d33;
-    border-left: 6px solid #6c757d;
-  }
-
-  .ticket.nízká {
-    background-color: #00ff2a3a;
-    border-left: 6px solid #15ff00;
-  }
-
-  .ticket.střední {
-    background-color: #ffe10033;
-    border-left: 6px solid #ffea00;
-  }
-
-  .ticket.vysoká {
-    background-color: #fd7e1433;
-    border-left: 6px solid #fd7e14;
-  }
-
-  .ticket.kritická {
-    background-color: #721c2433;
-    border-left: 6px solid #721c24;
-  }
-
-  .ticket p {
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  .ticket p:first-of-type {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #fff;
-  }
-
-  h1,
-  h2 {
-    font-size: 2rem;
-    color: #ffffff;
-    margin-bottom: 10px;
-  }
-
-  p {
-    margin-top: 10px;
-    font-size: 1.1rem;
-    color: #aaa;
-  }
-
-  section {
-    background: #2a2a2a;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
-    margin-bottom: 30px;
-  }
-
-  form label {
-    display: block;
-    margin-bottom: 15px;
-    color: #ddd;
-    text-align: left;
-  }
-
-  form input {
-    width: 100%;
-    padding: 12px 0px 12px 12px; /* nahoře, vpravo, dole, vlevo */
-    border-radius: 6px;
-    border: 1px solid #555;
-    background-color: #1a1a1a;
-    color: #f0f0f0;
-    font-size: 16px;
-    box-sizing: border-box;
-  }
-
-  form input::placeholder {
-    color: #777;
-  }
-
-  form button[type="submit"] {
-    padding: 14px 24px;
-    min-height: 48px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    background-color: #28a745;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  form button[type="submit"]:hover {
-    background-color: #218838;
-  }
-
-  form button[type="submit"]:hover {
-    background-color: #218838;
-  }
-
-  .admin-profile {
-    border: 2px dashed #28a745;
-  }
-
-  .ticket {
     overflow: hidden;
-    transition:
-      max-height 0.3s ease,
-      padding 0.3s ease;
-    max-height: 1000px; /* výchozí pro desktop */
-    padding: 16px;
+    transition: max-height 0.3s ease, padding 0.3s ease;
   }
+
+  .ticket.triviální { background-color: #6c757d33; border-left: 6px solid #6c757d; }
+  .ticket.nízká     { background-color: #00ff2a3a; border-left: 6px solid #15ff00; }
+  .ticket.střední   { background-color: #ffe10033; border-left: 6px solid #ffea00; }
+  .ticket.vysoká    { background-color: #fd7e1433; border-left: 6px solid #fd7e14; }
+  .ticket.kritická  { background-color: #721c2433; border-left: 6px solid #721c24; }
 
   .ticket .ticket-header {
     display: flex;
@@ -392,7 +282,7 @@
     font-weight: bold;
     color: #ccc;
     user-select: none;
-    display: none; /* defaultně neukazovat */
+    display: none;
   }
 
   .ticket .ticket-details {
@@ -402,170 +292,8 @@
   }
 
   .ticket.expanded {
-    max-height: none; /* povolí plnou výšku dle obsahu */
+    max-height: none;
     overflow: visible;
-  }
-
-  @media (max-width: 768px) {
-    main {
-      padding: 20px;
-    }
-
-    nav.menu {
-      flex-direction: column;
-      width: 100%;
-      gap: 8px;
-      align-items: stretch;
-    }
-
-    nav.menu button {
-      width: 100%;
-      text-align: center;
-    }
-
-    section {
-      padding: 12px;
-      border-radius: 10px;
-      max-width: 100%;
-    }
-
-    form label {
-      font-size: 0.95rem;
-    }
-
-    form input,
-    form button[type="submit"] {
-      font-size: 15px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    h1,
-    h2 {
-      font-size: 1.5rem;
-    }
-
-    p {
-      font-size: 1rem;
-    }
-
-    form input,
-    form button[type="submit"] {
-      padding: 10px 0px 10px 10px;
-    }
-
-    .ticket {
-      max-height: 60px;
-      padding: 12px 16px;
-      overflow: hidden;
-    }
-
-    .ticket.expanded {
-      max-height: none; /* povolí plnou výšku dle obsahu */
-      padding: 16px;
-      overflow: visible;
-    }
-
-    .ticket .ticket-details {
-      display: none;
-      opacity: 0;
-    }
-
-    .ticket.expanded .ticket-details {
-      display: block;
-      opacity: 1;
-    }
-
-    .ticket .ticket-header span {
-      display: inline-block;
-    }
-  }
-</style>
-
-<!-- <style>
-  main {
-    padding: 40px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #1e1e1e;
-    color: #f0f0f0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  }
-
-  main.is-admin {
-    background-color: #232323;
-  }
-
-  nav.menu {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 30px;
-  }
-
-  nav.menu button {
-    padding: 12px 26px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
-    color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
-    transition: all 0.25s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  nav.menu button::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -75%;
-    width: 150%;
-    height: 100%;
-    background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), transparent);
-    transform: skewX(-20deg);
-    transition: all 0.5s;
-  }
-
-  nav.menu button:hover::before {
-    left: 100%;
-  }
-
-  nav.menu button:hover {
-    background: linear-gradient(145deg, #3a3a3a, #1e1e1e);
-    transform: translateY(-1px);
-  }
-
-  nav.menu button:active {
-    transform: scale(0.98);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  }
-
-  nav.menu button.active {
-    background: linear-gradient(145deg, #2d6a4f, #1b4332);
-  }
-
-  nav.menu button.logout {
-    background: linear-gradient(145deg, #6c757d, #495057);
-  }
-
-  nav.menu button.logout:hover {
-    background: linear-gradient(145deg, #c82333, #a71d2a);
-  }
-
-  section {
-    background: #2a2a2a;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
-    margin-bottom: 30px;
   }
 
   h1, h2 {
@@ -578,6 +306,21 @@
     margin-top: 10px;
     font-size: 1.1rem;
     color: #aaa;
+  }
+
+  strong{
+    color: white;
+  }
+
+  section {
+    background: #2a2a2a;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    margin-bottom: 30px;
   }
 
   .admin-profile {
@@ -616,60 +359,13 @@
     color: white;
     font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.2s;
     width: 100%;
+    box-sizing: border-box;
   }
 
   form button[type="submit"]:hover {
     background-color: #218838;
-  }
-
-  .ticket {
-    padding: 16px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #fff;
-    background-color: #2d2d2d;
-    overflow: hidden;
-  }
-
-  .ticket.triviální { background-color: #6c757d33; border-left: 6px solid #6c757d; }
-  .ticket.nízká     { background-color: #00ff2a3a; border-left: 6px solid #15ff00; }
-  .ticket.střední   { background-color: #ffe10033; border-left: 6px solid #ffea00; }
-  .ticket.vysoká    { background-color: #fd7e1433; border-left: 6px solid #fd7e14; }
-  .ticket.kritická  { background-color: #721c2433; border-left: 6px solid #721c24; }
-
-  .ticket .ticket-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #555;
-  }
-
-  .ticket .ticket-header span {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #ccc;
-    user-select: none;
-    display: none; /* defaultně neviditelné */
-  }
-
-  .ticket .ticket-details {
-    margin-top: 12px;
-    transition: opacity 0.3s ease;
-    opacity: 1;
-  }
-
-  .ticket.expanded {
-    max-height: none;
-    overflow: visible;
   }
 
   @media (max-width: 768px) {
@@ -682,6 +378,11 @@
       width: 100%;
       gap: 8px;
       align-items: stretch;
+    }
+
+    nav.menu button {
+      width: 100%;
+      text-align: center;
     }
 
     section {
@@ -708,6 +409,11 @@
       font-size: 1rem;
     }
 
+    form input,
+    form button[type="submit"] {
+      padding: 10px;
+    }
+
     .ticket {
       max-height: 60px;
       padding: 12px 16px;
@@ -732,4 +438,4 @@
       display: inline-block;
     }
   }
-</style> -->
+</style>
