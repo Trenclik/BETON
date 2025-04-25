@@ -63,6 +63,7 @@
 		font-size: 30px;
 		font-weight: bold;
 		text-align: center;
+		margin-left: 5px;
 	}
 
 	.Logo {
