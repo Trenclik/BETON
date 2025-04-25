@@ -5,6 +5,7 @@
   let isFormComplete = $state(false);
   let isRegistered = $state(false);
   let isAdmin = $state(false);
+
   $effect(() => {
     isFormComplete =
       title.trim() !== "" &&
@@ -82,11 +83,11 @@
           bind:value={selectedCategory}
         >
           <option value="" disabled selected hidden>Vyber Kategorii</option>
-          <option value="Critical">Kritická</option>
-          <option value="High">Vysoká</option>
-          <option value="Medium">Střední</option>
-          <option value="Low">Nízká</option>
-          <option value="Trivial">Triviální</option>
+          <option value="Kritická">Kritická</option>
+          <option value="Vysoká">Vysoká</option>
+          <option value="Střední">Střední</option>
+          <option value="Nízká">Nízká</option>
+          <option value="Triviální">Triviální</option>
         </select>
       </div>
 
