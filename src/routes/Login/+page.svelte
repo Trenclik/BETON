@@ -2,11 +2,11 @@
   import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
   import StylingPage from "$lib/Components/Styling-page.svelte";
 
-  let email = "";
-  let password = "";
-  let errorMessage = "";
-  let successMessage = "";
-  let passwordVisible = false;
+  let email = $state("");
+  let password = $state("");
+  let errorMessage = $state("");
+  let successMessage = $state("");
+  let passwordVisible = $state(false);
 
   function validateForm() {
     if (!email || !password) {
@@ -41,6 +41,7 @@
       // Doplnit jméno a příjmení — musíš je dostat od backendu!
       localStorage.setItem("firstName", result.firstName || "");
       localStorage.setItem("lastName", result.lastName || "");
+      localStorage.setItem("email", result.email || "")
 
       successMessage = "Přihlášení úspěšné!";
       errorMessage = "";

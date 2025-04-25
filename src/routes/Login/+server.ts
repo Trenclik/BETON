@@ -40,9 +40,11 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
         
 		return json({
 			message: 'Přihlášení úspěšné',
-			isAdmin: !!user.admin,           // převedeme číslo na boolean
-			firstName: user.name,            // použijeme správné jméno
-			lastName: user.sname,            // a příjmení
+			isAdmin: !!user.admin,
+			firstName: user.name,
+			lastName: user.sname,
+			email: user.email
+
 		  }, { status: 200 });
 		  
 		  

@@ -7,7 +7,9 @@ import { eq } from "drizzle-orm";
 
 
 export const POST: RequestHandler = async ({ request }) => { 
-    try { const body = await request.json(); const { name, surname, email, password } = body;
+    try { 
+        const body = await request.json();
+        const { name, surname, email, password } = body;
         // Basic validation
         if (!name || !surname || !email || !password) {
             return json({ message: 'Všechna pole musí být vyplněna.' }, { status: 400 });

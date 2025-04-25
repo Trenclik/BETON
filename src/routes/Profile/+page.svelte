@@ -1,4 +1,6 @@
-<script>
+<script lang="ts">
+    import { error } from "@sveltejs/kit";
+
   let isRegistered = $state(false);
   let isAdmin = $state(false);
   let activeTab = $state("tickets");
@@ -7,8 +9,10 @@
   let firstName = $state("");
   let lastName = $state("");
   let email = $state("");
-  let nickname = $state("");
 
+  let errorMessage = $state("")
+  let successMesage = $state("")
+  let tickets = $state("")
   $effect(() => {
     if (typeof localStorage !== "undefined") {
       firstName = localStorage.getItem("firstName") || "";
@@ -21,9 +25,31 @@
       if (!isRegistered) {
         location.href = "/Login";
       }
+      list(new Event("init"));
     }
   });
+  async function list(event: Event) {
+    event.preventDefault();
+    if (isAdmin) return;
 
+    try {
+      const response = await fetch("/Profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      })
+
+      const result = await response.json();
+      tickets = result.body
+      if (tickets === "[]") {
+        errorMessage = "Nebyly nalezeny žádné tickety"
+        return
+      }
+      successMesage = "Načtení ticketů úspěšné!"
+      errorMessage = ""
+    } catch (error) {
+      errorMessage = (error as Error).message;
+    }
+  }
   function saveProfile() {
     localStorage.setItem("firstName", firstName);
     localStorage.setItem("lastName", lastName);
@@ -34,6 +60,9 @@
   function logout() {
     localStorage.removeItem("isRegistered");
     localStorage.removeItem("isAdmin");
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
+    localStorage.removeItem("email")
     location.href = "/Login";
   }
 </script>
@@ -61,21 +90,25 @@
       <p>Vítej zpět, administrátore.</p>
     </section>
   {/if}
-
   {#if activeTab === "tickets"}
-    <section>
-      <h2>Tvoje tickety</h2>
-      {#if isAdmin}
-        <label for="filter">Filtrovat podle stavu:</label>
-        <select id="filter" bind:value={ticketFilter}>
-          <option value="vse">Vše</option>
-          <option value="hotovo">Hotovo</option>
-          <option value="rozpracovano">Rozpracováno</option>
-          <option value="nedokonceny">Nedokončený</option>
-        </select>
-      {/if}
-      <p>Zatím tu žádné nemáš, nebo je tu třeba načíst z backendu.</p>
-    </section>
+    {#if errorMessage}
+      <p>{errorMessage}</p>
+    {/if}
+    {#if successMesage}
+      <section>
+        <h2>Tvoje tickety</h2>
+        {#if isAdmin}
+          <label for="filter">Filtrovat podle stavu:</label>
+          <select id="filter" bind:value={ticketFilter}>
+            <option value="vse">Vše</option>
+            <option value="hotovo">Hotovo</option>
+            <option value="rozpracovano">Rozpracováno</option>
+            <option value="cekajici">Čekající</option>
+          </select>
+        {/if}
+        <p>{tickets}</p>
+      </section>
+    {/if}
   {:else if activeTab === "profile"}
     <section>
       <h2>Úprava profilu</h2>

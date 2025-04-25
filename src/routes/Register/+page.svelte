@@ -2,16 +2,16 @@
   import ShowHideButton from "$lib/Components/ShowHideButton.svelte";
   import StylingPage from "$lib/Components/Styling-page.svelte";
 
-  let name = "";
-  let surname = "";
-  let email = "";
-  let password = "";
-  let confirmPassword = "";
-  let errorMessage = "";
-  let successMessage = "";
-  let passwordVisible = false;
-  let confirmPasswordVisible = false;
-  let agreedToTerms = false;
+  let name = $state("");
+  let surname = $state("");
+  let email = $state("");
+  let password = $state("");
+  let confirmPassword = $state("");
+  let errorMessage = $state("");
+  let successMessage = $state("");
+  let passwordVisible = $state(false);
+  let confirmPasswordVisible = $state(false);
+  let agreedToTerms = $state(false);
 
   function validateForm() {
     if (!name || !surname || !email || !password || !confirmPassword) {
@@ -65,7 +65,7 @@
 <StylingPage />
   
 <main>
-  <form class="Register-Container" on:submit={register}>
+  <form class="Register-Container" onsubmit={register}>
     <input type="text" placeholder="Jméno" bind:value={name} />
     <input type="text" placeholder="Příjmení" bind:value={surname} />
     <input type="email" placeholder="Email" bind:value={email} />

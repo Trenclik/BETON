@@ -5,7 +5,6 @@
   let isFormComplete = $state(false);
   let isRegistered = $state(false);
   let isAdmin = $state(false);
-
   $effect(() => {
     isFormComplete =
       title.trim() !== "" &&
@@ -31,30 +30,35 @@
     const ticketData = {
       title,
       category: selectedCategory,
-      description,
+      description
     };
 
     try {
-      const response = await fetch("/api/tickets", {
+      const response = await fetch("/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(ticketData),
       });
 
       if (!response.ok) {
-        throw new Error("Chyba při odesílání ticketu");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Chyba při odesílání ticketu");
       }
 
       const result = await response.json();
       console.log("Ticket byl úspěšně odeslán:", result);
+      
+      // Reset form after successful submission
+      title = "";
+      selectedCategory = "";
+      description = "";
+      
+      // Show success message (you might want to add a proper notification system)
+      alert("Ticket byl úspěšně odeslán!");
     } catch (error) {
       console.error("Chyba:", error);
     }
   }
-
-  //Kontrola registrace uživatele přesměrování na login ale nechci to teď mít zaplé pokud to potřebuješ vyskouset odkomentuj to
 </script>
 
 <main>
@@ -114,6 +118,7 @@
 </main>
 
 <style>
+  /* Your existing styles remain the same */
   main {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background-color: #484745;
@@ -165,12 +170,9 @@
     background-repeat: no-repeat;
     background-position: right 16px center;
     background-size: 24px;
-
-    /* Default barva když je validní (něco vybráno) */
     color: #767475;
   }
 
-  /* Placeholder styl = první option je aktivní */
   select:invalid {
     color: #767475;
   }
@@ -180,14 +182,14 @@
     border: 1px solid #767475;
     padding: 12px 16px;
     border-radius: 6px;
-    color: #ffffff; /* <- psaný text bude bílý */
+    color: #ffffff;
     font-size: 16px;
     width: 500px;
     box-sizing: border-box;
   }
 
   .TitleInput::placeholder {
-    color: #767475; /* <- placeholder zůstává šedý */
+    color: #767475;
     opacity: 1;
   }
 
@@ -235,7 +237,7 @@
   }
 
   .SubmitTicket.CompleteReady {
-    background-color: #28a745; /* zelená */
+    background-color: #28a745;
     color: white;
     border: 2px solid #28a745;
     transition: all 0.3s ease;
