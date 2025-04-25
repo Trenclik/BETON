@@ -55,7 +55,6 @@
       description = "";
 
       // Show success message (you might want to add a proper notification system)
-      alert("Ticket byl úspěšně odeslán!");
     } catch (error) {
       console.error("Chyba:", error);
     }
