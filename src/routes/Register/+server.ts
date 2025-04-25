@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 import { eq } from "drizzle-orm";
 
 
-export const POST: RequestHandler = async ({ request }) => { 
+export const POST: RequestHandler = async ({ request, cookies }) => { 
     try { 
         const body = await request.json();
         const { name, surname, email, password } = body;
@@ -32,7 +32,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
         // Hash the password
         const passwordHash = await bcrypt.hash(password, 10);
-
         // Insert new user
         await db.insert(usersTable).values({
             name,
@@ -44,7 +43,18 @@ export const POST: RequestHandler = async ({ request }) => {
             isEmailVerified: 1,
             isOnline: 0
         });
-
+        const [user] = await db
+			.select()
+			.from(usersTable)
+			.where(eq(usersTable.email, email));
+        // Nastavení cookie
+		cookies.set('userId', user.id.toString(), {
+			path: '/',
+			httpOnly: true,
+			sameSite: 'lax',
+			secure: process.env.NODE_ENV === 'production',
+			maxAge: 60 * 60 * 24 * 7 // 7 dní
+		});
         return json({ message: 'Registrace úspěšná!' }, { status: 200 });
     } catch (error) {
 	    console.error('Chyba při registraci:', error);
