@@ -31,7 +31,7 @@
     const ticketData = {
       title,
       category: selectedCategory,
-      description
+      description,
     };
 
     try {
@@ -48,12 +48,12 @@
 
       const result = await response.json();
       console.log("Ticket byl úspěšně odeslán:", result);
-      
+
       // Reset form after successful submission
       title = "";
       selectedCategory = "";
       description = "";
-      
+
       // Show success message (you might want to add a proper notification system)
     } catch (error) {
       console.error("Chyba:", error);
@@ -118,12 +118,15 @@
 </main>
 
 <style>
-  /* Your existing styles remain the same */
+  * {
+    box-sizing: border-box;
+  }
+
   main {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background-color: #484745;
     color: #767475;
-    min-height: 599px;
+    min-height: 679px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -142,8 +145,8 @@
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    width: 540px;
-    max-width: 100%;
+    width: 100%;
+    max-width: 600px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -155,85 +158,75 @@
     flex-direction: column;
     gap: 20px;
     margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .TitleInput,
+  select {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: 1px solid #767475;
+    background-color: transparent;
+    color: #ffffff;
+    box-sizing: border-box;
+  }
+
+  .TitleInput::placeholder,
+  textarea::placeholder {
+    color: #767475;
+    opacity: 1;
+    text-align: left;
   }
 
   select {
-    background-color: transparent;
-    border: 1px solid #767475;
-    padding: 12px 16px;
-    border-radius: 6px;
-    font-size: 16px;
-    width: 500px;
-    box-sizing: border-box;
     appearance: none;
     background-image: url("data:image/svg+xml;utf8,<svg fill='%23767475' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
     background-repeat: no-repeat;
-    background-position: right 16px center;
+    background-position: right 20px center;
     background-size: 24px;
-    color: #767475;
   }
 
   select:invalid {
     color: #767475;
   }
 
-  .TitleInput {
-    background-color: transparent;
-    border: 1px solid #767475;
-    padding: 12px 16px;
-    border-radius: 6px;
-    color: #ffffff;
-    font-size: 16px;
-    width: 500px;
-    box-sizing: border-box;
-  }
-
-  .TitleInput::placeholder {
-    color: #767475;
-    opacity: 1;
-  }
-
   .TicketDescription {
     margin-bottom: 20px;
+    width: 100%;
   }
 
   textarea {
-    width: 369px;
-    padding: 16px;
+    width: 100%;
+    padding: 20px;
     border-radius: 10px;
     border: none;
     background-color: #151515;
-    color: #767475;
+    color: #ffffff;
     resize: vertical;
-    font-size: 16px;
+    font-size: 17px;
     min-height: 150px;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
   }
 
-  textarea {
-    color: #ffffff;
-  }
-
-  textarea::placeholder {
-    color: #767475;
-    opacity: 1;
-  }
-
   .TicketButton {
     text-align: center;
+    width: 100%;
   }
 
   .SubmitTicket {
     background-color: #151515;
     color: #767475;
     border: none;
-    padding: 12px 32px;
+    padding: 14px 32px;
     border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    font-size: 16px;
+    font-size: 17px;
+    width: 100%;
   }
 
   .SubmitTicket.CompleteReady {
@@ -241,5 +234,47 @@
     color: white;
     border: 2px solid #28a745;
     transition: all 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    main {
+      padding: 20px;
+    }
+
+    .TicketConatainer {
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 22px;
+    }
+
+    .SubmitTicket {
+      padding: 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 20px;
+    }
+
+    .TicketConatainer {
+      padding: 16px;
+    }
+
+    .TitleOfTicket {
+      gap: 16px;
+    }
+
+    textarea {
+      font-size: 15px;
+      padding: 14px;
+      min-height: 120px;
+    }
+
+    .SubmitTicket {
+      font-size: 15px;
+    }
   }
 </style>
