@@ -65,5 +65,20 @@
     transform: scale(1.1);
     transition: transform 0.2s ease;
   }
+
+  .show-hide-icon {
+    display: flex;
+    justify-content: right;
+    align-items: right;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
 </style>
 

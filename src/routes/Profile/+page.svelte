@@ -21,7 +21,7 @@
   let tickets = $state("");
   let expandedTickets = $state<string[]>([]);
 
-  const priorityOrder = {
+  const priorityOrder: Record<string, number> = {
     kritická: 1,
     vysoká: 2,
     střední: 3,
@@ -127,7 +127,7 @@
       <section>
         <h2>Tickety</h2>
         {#if isAdmin}
-          <label for="filter">Filtrovat podle stavu:</label>
+          <label class="Filtr-state" for="filter">Filtrovat podle stavu:</label>
           <select id="filter" bind:value={ticketFilter}>
             <option value="vse">Vše</option>
             <option value="hotovo">Hotovo</option>
@@ -135,10 +135,24 @@
             <option value="cekajici">Čekající</option>
           </select>
         {/if}
-        {#each (JSON.parse(tickets) as Ticket[]).sort((a, b) => priorityOrder[a.category.toLowerCase()] - priorityOrder[b.category.toLowerCase()]) as ticket (ticket.id)}
+        {#each (JSON.parse(tickets) as Ticket[]).sort((a, b) => {
+          const priorityA = priorityOrder[a.category.toLowerCase()] ?? 999;
+          const priorityB = priorityOrder[b.category.toLowerCase()] ?? 999;
+
+          if (priorityA !== priorityB) {
+            return priorityA - priorityB;
+          }
+
+          const dateA = new Date(a.createdAt).getTime() || 0;
+          const dateB = new Date(b.createdAt).getTime() || 0;
+
+          return dateB - dateA;
+        }) as ticket (ticket.id)}
           <div
             class={`ticket ${ticket.category.toLowerCase()} ${isExpanded(ticket.id) ? "expanded" : ""}`}
           >
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div class="ticket-header" onclick={() => toggleTicket(ticket.id)}>
               <p><strong>{ticket.title}</strong></p>
               <span>{isExpanded(ticket.id) ? "−" : "+"}</span>
