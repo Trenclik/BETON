@@ -62,10 +62,6 @@
 </script>
 
 <main>
-  {#if isAdmin}
-    <h1>Admin Panel</h1>
-    <p>Zde budou například seznamy ticketů nebo správa uživatelů</p>
-  {:else}
     <h1>Ticket</h1>
     <div class="TicketConatainer">
       <div class="TitleOfTicket">
@@ -89,20 +85,18 @@
           <option value="Triviální">Triviální</option>
         </select>
       </div>
-
-      {#if selectedCategory}
         <div class="TicketDescription">
-          <textarea
-            name="TicketDescription"
-            id="TicketDescription"
-            cols="30"
-            rows="10"
-            placeholder="Zanechte popis ticketu nebo zprávu pro nás..."
-            bind:value={description}
-          ></textarea>
+          {#if title.trim() !== "" && selectedCategory !== ""}
+            <textarea
+              name="TicketDescription"
+              id="TicketDescription"
+              cols="30"
+              rows="10"
+              placeholder="Zanechte popis ticketu nebo zprávu pro nás..."
+              bind:value={description}
+            ></textarea>
+          {/if}
         </div>
-      {/if}
-
       <div class="TicketButton">
         <button
           type="submit"
@@ -114,7 +108,6 @@
         </button>
       </div>
     </div>
-  {/if}
 </main>
 
 <style>
@@ -173,6 +166,13 @@
     box-sizing: border-box;
   }
 
+  select{
+    background-color: #41403e;
+  }
+
+  option{
+    color: white;
+  }
   .TitleInput::placeholder,
   textarea::placeholder {
     color: #767475;

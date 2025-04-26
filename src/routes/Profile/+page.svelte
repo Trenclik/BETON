@@ -1,10 +1,18 @@
 <script lang="ts">
   import { error, json } from "@sveltejs/kit";
 
+  interface Ticket {
+    id: string;
+    title: string;
+    createdAt: string;
+    status: string;
+    category: string;
+    msg: string;
+  }
   let isRegistered = $state(false);
   let isAdmin = $state(false);
   let activeTab = $state("tickets");
-  let ticketFilter = $state("vse"); // přidaný stav pro filtr
+  let ticketFilter = $state("vse");
   let firstName = $state("");
   let lastName = $state("");
   let email = $state("");
@@ -12,6 +20,13 @@
   let successMesage = $state("");
   let tickets = $state("");
   let expandedTickets = $state<string[]>([]);
+
+  const priorityOrder = {
+    kritická: 1,
+    vysoká: 2,
+    střední: 3,
+    nízká: 4,
+  };
 
   function toggleTicket(ticketId: string) {
     if (expandedTickets.includes(ticketId)) {
@@ -40,15 +55,15 @@
       list(new Event("init"));
     }
   });
+
   async function list(event: Event) {
     event.preventDefault();
-    if (isAdmin) return;
 
     try {
       const response = await fetch("/Profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isAdmin })
+        body: JSON.stringify({ isAdmin }),
       });
 
       const result = await response.json();
@@ -110,7 +125,7 @@
     {/if}
     {#if successMesage}
       <section>
-        <h2>Tvoje tickety</h2>
+        <h2>Tickety</h2>
         {#if isAdmin}
           <label for="filter">Filtrovat podle stavu:</label>
           <select id="filter" bind:value={ticketFilter}>
@@ -120,12 +135,10 @@
             <option value="cekajici">Čekající</option>
           </select>
         {/if}
-        {#each JSON.parse(tickets) as ticket (ticket.id)}
+        {#each (JSON.parse(tickets) as Ticket[]).sort((a, b) => priorityOrder[a.category.toLowerCase()] - priorityOrder[b.category.toLowerCase()]) as ticket (ticket.id)}
           <div
             class={`ticket ${ticket.category.toLowerCase()} ${isExpanded(ticket.id) ? "expanded" : ""}`}
           >
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
             <div class="ticket-header" onclick={() => toggleTicket(ticket.id)}>
               <p><strong>{ticket.title}</strong></p>
               <span>{isExpanded(ticket.id) ? "−" : "+"}</span>
@@ -151,15 +164,11 @@
       >
         <label>
           Jméno:
-          <input bind:value={firstName} type="text" />
+          <input bind:value={firstName} type="text" required />
         </label>
         <label>
           Příjmení:
           <input bind:value={lastName} type="text" />
-        </label>
-        <label>
-          Email:
-          <input bind:value={email} type="email" />
         </label>
         <button type="submit">Uložit</button>
       </form>
@@ -170,7 +179,7 @@
 <style>
   main {
     padding: 40px;
-    min-height: 100vh;
+    min-height: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -260,14 +269,31 @@
     font-weight: 500;
     color: #fff;
     overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s ease;
+    transition:
+      max-height 0.3s ease,
+      padding 0.3s ease;
   }
 
-  .ticket.triviální { background-color: #6c757d33; border-left: 6px solid #6c757d; }
-  .ticket.nízká     { background-color: #00ff2a3a; border-left: 6px solid #15ff00; }
-  .ticket.střední   { background-color: #ffe10033; border-left: 6px solid #ffea00; }
-  .ticket.vysoká    { background-color: #fd7e1433; border-left: 6px solid #fd7e14; }
-  .ticket.kritická  { background-color: #721c2433; border-left: 6px solid #721c24; }
+  .ticket.triviální {
+    background-color: #6c757d33;
+    border-left: 6px solid #6c757d;
+  }
+  .ticket.nízká {
+    background-color: #00ff2a3a;
+    border-left: 6px solid #15ff00;
+  }
+  .ticket.střední {
+    background-color: #ffe10033;
+    border-left: 6px solid #ffea00;
+  }
+  .ticket.vysoká {
+    background-color: #fd7e1433;
+    border-left: 6px solid #fd7e14;
+  }
+  .ticket.kritická {
+    background-color: #721c2433;
+    border-left: 6px solid #721c24;
+  }
 
   .ticket .ticket-header {
     display: flex;
@@ -296,7 +322,8 @@
     overflow: visible;
   }
 
-  h1, h2 {
+  h1,
+  h2 {
     font-size: 2rem;
     color: #fff;
     margin-bottom: 10px;
@@ -308,7 +335,7 @@
     color: #aaa;
   }
 
-  strong{
+  strong {
     color: white;
   }
 
@@ -401,7 +428,8 @@
   }
 
   @media (max-width: 480px) {
-    h1, h2 {
+    h1,
+    h2 {
       font-size: 1.5rem;
     }
 
