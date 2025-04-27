@@ -32,6 +32,11 @@
       title,
       category: selectedCategory,
       description,
+      sender: {
+        firstName: localStorage.getItem("firstName"),
+        lastName: localStorage.getItem("lastName"),
+        email: localStorage.getItem("email"),
+      },
     };
 
     try {
@@ -49,12 +54,10 @@
       const result = await response.json();
       console.log("Ticket byl úspěšně odeslán:", result);
 
-      // Reset form after successful submission
+      // Reset form
       title = "";
       selectedCategory = "";
       description = "";
-
-      // Show success message (you might want to add a proper notification system)
     } catch (error) {
       console.error("Chyba:", error);
     }
@@ -62,52 +65,52 @@
 </script>
 
 <main>
-    <h1>Ticket</h1>
-    <div class="TicketConatainer">
-      <div class="TitleOfTicket">
-        <input
-          type="text"
-          placeholder="Název Ticketu"
-          class="TitleInput"
-          bind:value={title}
-        />
-        <select
-          name="TicketPriority"
-          id="TicketPriority"
-          required
-          bind:value={selectedCategory}
-        >
-          <option value="" disabled selected hidden>Vyber Kategorii</option>
-          <option value="Kritická">Kritická</option>
-          <option value="Vysoká">Vysoká</option>
-          <option value="Střední">Střední</option>
-          <option value="Nízká">Nízká</option>
-          <option value="Triviální">Triviální</option>
-        </select>
-      </div>
-        <div class="TicketDescription">
-          {#if title.trim() !== "" && selectedCategory !== ""}
-            <textarea
-              name="TicketDescription"
-              id="TicketDescription"
-              cols="30"
-              rows="10"
-              placeholder="Zanechte popis ticketu nebo zprávu pro nás..."
-              bind:value={description}
-            ></textarea>
-          {/if}
-        </div>
-      <div class="TicketButton">
-        <button
-          type="submit"
-          class="SubmitTicket"
-          class:CompleteReady={isFormComplete}
-          onclick={submitTicket}
-        >
-          Odeslat Ticket
-        </button>
-      </div>
+  <h1>Ticket</h1>
+  <div class="TicketConatainer">
+    <div class="TitleOfTicket">
+      <input
+        type="text"
+        placeholder="Název Ticketu"
+        class="TitleInput"
+        bind:value={title}
+      />
+      <select
+        name="TicketPriority"
+        id="TicketPriority"
+        required
+        bind:value={selectedCategory}
+      >
+        <option value="" disabled selected hidden>Vyber Kategorii</option>
+        <option value="Kritická">Kritická</option>
+        <option value="Vysoká">Vysoká</option>
+        <option value="Střední">Střední</option>
+        <option value="Nízká">Nízká</option>
+        <option value="Triviální">Triviální</option>
+      </select>
     </div>
+    <div class="TicketDescription">
+      {#if title.trim() !== "" && selectedCategory !== ""}
+        <textarea
+          name="TicketDescription"
+          id="TicketDescription"
+          cols="30"
+          rows="10"
+          placeholder="Zanechte popis ticketu nebo zprávu pro nás..."
+          bind:value={description}
+        ></textarea>
+      {/if}
+    </div>
+    <div class="TicketButton">
+      <button
+        type="submit"
+        class="SubmitTicket"
+        class:CompleteReady={isFormComplete}
+        onclick={submitTicket}
+      >
+        Odeslat Ticket
+      </button>
+    </div>
+  </div>
 </main>
 
 <style>
@@ -166,11 +169,11 @@
     box-sizing: border-box;
   }
 
-  select{
+  select {
     background-color: #41403e;
   }
 
-  option{
+  option {
     color: white;
   }
   .TitleInput::placeholder,

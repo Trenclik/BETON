@@ -8,6 +8,11 @@
     status: string;
     category: string;
     msg: string;
+    sender?: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
   }
   let isRegistered = $state(false);
   let isAdmin = $state(false);
@@ -162,6 +167,14 @@
               <p><strong>Status:</strong> {ticket.status}</p>
               <p><strong>Kategorie:</strong> {ticket.category}</p>
               <p><strong>Zpráva:</strong> {ticket.msg}</p>
+
+              {#if ticket.sender}
+                <p>
+                  <strong>Odesílatel:</strong>
+                  {ticket.sender.firstName}
+                  {ticket.sender.lastName} ({ticket.sender.email})
+                </p>
+              {/if}
             </div>
           </div>
         {/each}
