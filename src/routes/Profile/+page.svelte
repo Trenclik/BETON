@@ -86,10 +86,10 @@
 
   async function updateTicketStatus(ticketId: string, newStatus: string) {
     try {
-      const response = await fetch(`/api/tickets/${ticketId}`, {
+      const response = await fetch(`/Profile`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ status: newStatus, ticketId }),
       });
 
       if (response.ok) {

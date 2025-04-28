@@ -25,9 +25,22 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
         return json({
             message: "Načtení ticketů úspěšné!",
             body: JSON.stringify(tickets)
-        })
+        }, { status: 200 })
     } catch (err) {
         console.error('Chyba při získávání ticketů:', err);
         return json({ message: 'Chyba serveru při získávání ticketů.' }, { status: 500 })
+    }
+}
+
+export const PUT: RequestHandler = async ({ request }) => {
+    try{
+        const { ticketId, status } = await request.json();
+        await db.update(ticketTable)
+            .set({status})
+            .where(eq(ticketTable.id, ticketId))
+        return json({ message: 'Status ticketu změněn' }, { status: 200 })
+    } catch (err) {
+        console.error('Chyba při úpravě ticketů:', err);
+        return json({ message: 'Chyba serveru při úpravě ticketů.' }, { status: 500 })
     }
 }
