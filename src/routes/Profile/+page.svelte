@@ -9,10 +9,10 @@
     category: string;
     msg: string;
     sender?: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
   }
   let isRegistered = $state(false);
   let isAdmin = $state(false);
@@ -79,6 +79,29 @@
       }
       successMesage = "Načtení ticketů úspěšné!";
       errorMessage = "";
+    } catch (error) {
+      errorMessage = (error as Error).message;
+    }
+  }
+
+  async function updateTicketStatus(ticketId: string, newStatus: string) {
+    try {
+      const response = await fetch(`/api/tickets/${ticketId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        const updatedTickets = JSON.parse(tickets).map((ticket: Ticket) =>
+          ticket.id === ticketId ? { ...ticket, status: newStatus } : ticket
+        );
+        tickets = JSON.stringify(updatedTickets);
+        successMesage = "Status ticketu změněn.";
+        errorMessage = "";
+      } else {
+        throw new Error("Aktualizace statusu selhala.");
+      }
     } catch (error) {
       errorMessage = (error as Error).message;
     }
@@ -174,6 +197,26 @@
                   {ticket.sender.firstName}
                   {ticket.sender.lastName} ({ticket.sender.email})
                 </p>
+              {/if}
+
+              {#if isAdmin}
+                <div class="ticket-actions">
+                  <label>
+                    Změnit status:
+                    <select
+                      onchange={(event) =>
+                        updateTicketStatus(
+                          ticket.id,
+                          (event.target as HTMLSelectElement).value
+                        )}
+                      value={ticket.status}
+                    >
+                      <option value="cekajici">Čekající</option>
+                      <option value="rozpracovano">Rozpracováno</option>
+                      <option value="hotovo">Hotovo</option>
+                    </select>
+                  </label>
+                </div>
               {/if}
             </div>
           </div>
