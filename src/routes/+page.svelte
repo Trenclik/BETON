@@ -85,7 +85,6 @@
         <option value="Vysoká">Vysoká</option>
         <option value="Střední">Střední</option>
         <option value="Nízká">Nízká</option>
-        <option value="Triviální">Triviální</option>
       </select>
     </div>
     <div class="TicketDescription">
