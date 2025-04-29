@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 </script>
 
 <div class="styling-container">
@@ -13,7 +14,7 @@
   .styling-container {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 760px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -92,4 +93,6 @@
       margin-bottom: 0;
     }
   }
+
+
 </style>

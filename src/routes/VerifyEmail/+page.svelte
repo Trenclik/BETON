@@ -2,7 +2,8 @@
   import { integer } from "drizzle-orm/sqlite-core";
   import StylingPage from "$lib/Components/Styling-page.svelte";
 
-  let code = ["", "", "", ""]; // Pole pro ukládání hodnot inputů
+  let code = $state(["", "", "", ""]);
+  let error = $state("");
 
   function handleInput(index: number, event: Event) {
     const input = event.target as HTMLInputElement;
@@ -23,6 +24,21 @@
       (
         document.getElementById(`input-${index - 1}`) as HTMLInputElement
       )?.focus();
+    }
+  }
+
+  function handleVerify() {
+    const isEmpty = code.some((digit) => digit === "");
+    const joined = code.join("");
+
+    if (isEmpty) {
+      error = "Vyplňte prosím políčka";
+    } else if (!/^\d{4}$/.test(joined)) {
+      error = "Nesprávné kód";
+    } else {
+      error = "";
+      // Tady můžeš přidat logiku pro správný kód
+      console.log("Kód je správný:", joined);
     }
   }
 </script>
@@ -53,7 +69,10 @@
       {/each}
     </div>
     <a href="/"><strong>Poslat kód znovu</strong></a>
-    <button>Ověrit</button>
+    <button onclick={handleVerify}>Ověřit</button>
+    {#if error}
+      <p style="color: red; margin-top: 10px;">{error}</p>
+    {/if}
   </div>
 </main>
 

@@ -12,7 +12,7 @@
       <p>Váš účet byl vytvořen</p>
     </div>
     <img class="Succesful" src="./Succesful.svg" alt="" />
-    <button>Pokračovat</button>
+    <button><a href="/">Pokračovat</a></button>
   </div>
 </main>
 
@@ -57,5 +57,10 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
     }
 </style>

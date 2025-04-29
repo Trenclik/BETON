@@ -23,11 +23,11 @@
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",
-		"vite": "^6.2.1"
+		"vite": "^6.0.0"
 	},
 	"dependencies": {
 		"@libsql/client": "^0.14.0",
-		"bcrypt": "^5.1.1",
+		"bcryptjs": "^3.0.2",
 		"drizzle-orm": "^0.38.4"
 	}
 }
