@@ -151,10 +151,10 @@
         {#if isAdmin}
           <label class="Filtr-state" for="filter">Filtrovat podle stavu:</label>
           <select id="filter" bind:value={ticketFilter}>
-            <option value="vse">Vše</option>
-            <option value="hotovo">Hotovo</option>
-            <option value="rozpracovano">Rozpracováno</option>
-            <option value="cekajici">Čekající</option>
+            <option value="Vše">Vše</option>
+            <option value="Hotovo">Hotovo</option>
+            <option value="Rozpracováno">Rozpracováno</option>
+            <option value="Čekající">Čekající</option>
           </select>
         {/if}
         {#each (JSON.parse(tickets) as Ticket[]).sort((a, b) => {
