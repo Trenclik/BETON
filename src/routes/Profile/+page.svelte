@@ -141,18 +141,12 @@
     <button class="logout" onclick={logout}> Odhlásit se </button>
   </nav>
 
-  {#if isAdmin}
-    <section class="admin-profile">
-      <h1>Admin Profil</h1>
-      <p>Vítej zpět, administrátore.</p>
-    </section>
-  {/if}
   {#if activeTab === "tickets"}
     {#if errorMessage}
       <p>{errorMessage}</p>
     {/if}
     {#if successMesage}
-      <section>
+      <section class:is-admin={isAdmin}>
         <h2>Tickety</h2>
         {#if isAdmin}
           <label class="Filtr-state" for="filter">Filtrovat podle stavu:</label>
@@ -198,7 +192,6 @@
                   {ticket.sender.lastName} ({ticket.sender.email})
                 </p>
               {/if}
-
               {#if isAdmin}
                 <div class="ticket-actions">
                   <label>
@@ -211,9 +204,9 @@
                         )}
                       value={ticket.status}
                     >
-                      <option value="cekajici">Čekající</option>
-                      <option value="rozpracovano">Rozpracováno</option>
-                      <option value="hotovo">Hotovo</option>
+                      <option value="Čekající">Čekající</option>
+                      <option value="Rozpracováno">Rozpracováno</option>
+                      <option value="Hotovo">Hotovo</option>
                     </select>
                   </label>
                 </div>
@@ -391,8 +384,6 @@
     max-height: none;
     overflow: visible;
   }
-
-  h1,
   h2 {
     font-size: 2rem;
     color: #fff;
@@ -420,7 +411,7 @@
     margin-bottom: 30px;
   }
 
-  .admin-profile {
+  section.is-admin {
     border: 2px dashed #28a745;
   }
 
@@ -498,7 +489,6 @@
   }
 
   @media (max-width: 480px) {
-    h1,
     h2 {
       font-size: 1.5rem;
     }
