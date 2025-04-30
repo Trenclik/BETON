@@ -171,7 +171,7 @@
           return dateB - dateA;
         }) as ticket (ticket.id)}
           <div
-            class={`ticket ${ticket.category.toLowerCase()} ${isExpanded(ticket.id) ? "expanded" : ""}`}
+            class={ticket.status === `Hotovo` ? `ticket triviální` : `ticket ${ticket.category.toLowerCase()} ${isExpanded(ticket.id) ? "expanded" : ""}`}
           >
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
