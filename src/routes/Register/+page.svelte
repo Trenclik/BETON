@@ -197,10 +197,10 @@
       </button>
     </div>
 
-    <div class="checkbox-container">
+    <!-- <div class="checkbox-container">
       <input type="checkbox" bind:checked={agreedToTerms} class="checkbox" />
       <p>Souhlasím s <strong><a href="/">podmínkami</a></strong></p>
-    </div>
+    </div> -->
 
     <button type="submit"><strong>Registrovat se</strong></button>
 
