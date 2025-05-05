@@ -1,10 +1,20 @@
-<script>
+<script lang="ts">
   let selectedCategory = $state("");
   let title = $state("");
   let description = $state("");
   let isFormComplete = $state(false);
   let isRegistered = $state(false);
   let isAdmin = $state(false);
+
+  let selectedFile = $state<File | null>(null);
+
+  function handleFileUpload(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      selectedFile = input.files[0];
+      console.log("Vybraný soubor:", selectedFile.name);
+    }
+  }
 
   $effect(() => {
     isFormComplete =
@@ -99,6 +109,21 @@
         ></textarea>
       {/if}
     </div>
+    {#if title.trim() !== "" && selectedCategory !== "" && description.trim() !== ""}
+    <p>Přidat soubor</p>
+      <div class="file-upload-area">
+        <label for="fileInput">
+          <span class="plus-sign">+</span>
+          <input
+            type="file"
+            id="fileInput"
+            name="ticketFile"
+            class="hidden-file-input"
+            onchange={(e) => handleFileUpload(e)}
+          />
+        </label>
+      </div>
+    {/if}
     <div class="TicketButton">
       <button
         type="submit"
@@ -195,7 +220,6 @@
   }
 
   .TicketDescription {
-    margin-bottom: 20px;
     width: 100%;
   }
 
@@ -210,6 +234,38 @@
     font-size: 17px;
     min-height: 150px;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .file-upload-area {
+    width: 100%;
+    height: 150px;
+    background-color: #151515;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #767475;
+    font-size: 48px;
+    cursor: pointer;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .file-upload-area:hover {
+    background-color: #1e1e1e;
+  }
+
+  .plus-sign {
+    pointer-events: none;
+  }
+
+  .hidden-file-input {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
   }
 
   .TicketButton {

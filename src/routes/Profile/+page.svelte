@@ -286,7 +286,7 @@
         </label>
         <label>
           Příjmení:
-          <input bind:value={lastName} type="text" />
+          <input bind:value={lastName} type="text" required />
         </label>
         <button type="submit">Uložit</button>
       </form>
