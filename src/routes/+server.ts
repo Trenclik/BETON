@@ -29,7 +29,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			title: title,
 			category: category,
 			msg: description,
-			status: 'cekajicí'
+			status: 'Čekající'
 		});
 
 		return json({ message: 'Ticket úspěšně odeslán.' }, { status: 200 });

@@ -197,10 +197,10 @@
       </button>
     </div>
 
-    <div class="checkbox-container">
+    <!-- <div class="checkbox-container">
       <input type="checkbox" bind:checked={agreedToTerms} class="checkbox" />
       <p>Souhlasím s <strong><a href="/">podmínkami</a></strong></p>
-    </div>
+    </div> -->
 
     <button type="submit"><strong>Registrovat se</strong></button>
 
@@ -292,20 +292,6 @@
       height: 20px;
     }
   }
-
-  .checkbox-container {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    gap: 2px;
-  }
-
-  input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-  }
-
   button {
     width: 222px;
     height: 43px;
@@ -325,9 +311,6 @@
     margin-top: 3px;
   }
 
-  a {
-    color: rgba(30, 138, 37, 1);
-  }
 
   .error {
     color: red;
@@ -343,7 +326,7 @@
 
   @media (max-width: 768px), (max-width: 1024px) {
     .Register-Container {
-      height: 642px;
+      height: 690px;
     }
   }
 </style>

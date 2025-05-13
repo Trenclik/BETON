@@ -17,7 +17,7 @@
   let isRegistered = $state(false);
   let isAdmin = $state(false);
   let activeTab = $state("tickets");
-  let ticketFilter = $state("vse");
+  let ticketFilter = $state("Vše");
   let firstName = $state("");
   let lastName = $state("");
   let email = $state("");
@@ -141,26 +141,20 @@
     <button class="logout" onclick={logout}> Odhlásit se </button>
   </nav>
 
-  {#if isAdmin}
-    <section class="admin-profile">
-      <h1>Admin Profil</h1>
-      <p>Vítej zpět, administrátore.</p>
-    </section>
-  {/if}
   {#if activeTab === "tickets"}
     {#if errorMessage}
       <p>{errorMessage}</p>
     {/if}
     {#if successMesage}
-      <section>
+      <section class:is-admin={isAdmin}>
         <h2>Tickety</h2>
         {#if isAdmin}
           <label class="Filtr-state" for="filter">Filtrovat podle stavu:</label>
           <select id="filter" bind:value={ticketFilter}>
-            <option value="vse">Vše</option>
-            <option value="hotovo">Hotovo</option>
-            <option value="rozpracovano">Rozpracováno</option>
-            <option value="cekajici">Čekající</option>
+            <option value="Vše">Vše</option>
+            <option value="Hotovo">Hotovo</option>
+            <option value="Rozpracováno">Rozpracováno</option>
+            <option value="Čekající">Čekající</option>
           </select>
         {/if}
         {#each (JSON.parse(tickets) as Ticket[]).sort((a, b) => {
@@ -176,50 +170,104 @@
 
           return dateB - dateA;
         }) as ticket (ticket.id)}
-          <div
-            class={`ticket ${ticket.category.toLowerCase()} ${isExpanded(ticket.id) ? "expanded" : ""}`}
-          >
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <div class="ticket-header" onclick={() => toggleTicket(ticket.id)}>
-              <p><strong>{ticket.title}</strong></p>
-              <span>{isExpanded(ticket.id) ? "−" : "+"}</span>
-            </div>
-            <div class="ticket-details">
-              <p><strong>Vytvořeno:</strong> {ticket.createdAt}</p>
-              <p><strong>Status:</strong> {ticket.status}</p>
-              <p><strong>Kategorie:</strong> {ticket.category}</p>
-              <p><strong>Zpráva:</strong> {ticket.msg}</p>
+          {#if ticketFilter === "Vše"}
+            <div
+              class={ticket.status === `Hotovo`
+                ? `ticket triviální`
+                : `ticket ${ticket.category.toLowerCase()} ${isExpanded(ticket.id) ? "expanded" : ""}`}>
+              <!-- svelte-ignore a11y_click_events_have_key_events -->
+              <!-- svelte-ignore a11y_no_static_element_interactions -->
+              <div
+                class="ticket-header"
+                onclick={() => toggleTicket(ticket.id)}
+              >
+                <p><strong>{ticket.title}</strong></p>
+                <span>{isExpanded(ticket.id) ? "−" : "+"}</span>
+              </div>
+              <div class="ticket-details">
+                <p><strong>Vytvořeno:</strong> {ticket.createdAt}</p>
+                <p><strong>Status:</strong> {ticket.status}</p>
+                <p><strong>Kategorie:</strong> {ticket.category}</p>
+                <p><strong>Zpráva:</strong> {ticket.msg}</p>
 
-              {#if ticket.sender}
-                <p>
-                  <strong>Odesílatel:</strong>
-                  {ticket.sender.firstName}
-                  {ticket.sender.lastName} ({ticket.sender.email})
-                </p>
-              {/if}
-
-              {#if isAdmin}
-                <div class="ticket-actions">
-                  <label>
-                    Změnit status:
-                    <select
-                      onchange={(event) =>
-                        updateTicketStatus(
-                          ticket.id,
-                          (event.target as HTMLSelectElement).value
-                        )}
-                      value={ticket.status}
-                    >
-                      <option value="cekajici">Čekající</option>
-                      <option value="rozpracovano">Rozpracováno</option>
-                      <option value="hotovo">Hotovo</option>
-                    </select>
-                  </label>
-                </div>
-              {/if}
+                {#if ticket.sender}
+                  <p>
+                    <strong>Odesílatel:</strong>
+                    {ticket.sender.firstName}
+                    {ticket.sender.lastName} ({ticket.sender.email})
+                  </p>
+                {/if}
+                {#if isAdmin}
+                  <div class="ticket-actions">
+                    <label>
+                      Změnit status:
+                      <select
+                        onchange={(event) =>
+                          updateTicketStatus(
+                            ticket.id,
+                            (event.target as HTMLSelectElement).value
+                          )}
+                        value={ticket.status}
+                      >
+                        <option value="Čekající">Čekající</option>
+                        <option value="Rozpracováno">Rozpracováno</option>
+                        <option value="Hotovo">Hotovo</option>
+                      </select>
+                    </label>
+                  </div>
+                {/if}
+              </div>
             </div>
-          </div>
+          {:else if ticketFilter == ticket.status}
+            <div
+              class={ticket.status === `Hotovo`
+                ? `ticket triviální ${isExpanded(ticket.id) ? "expanded" : ""}`
+                : `ticket ${ticket.category.toLowerCase()} ${isExpanded(ticket.id) ? "expanded" : ""}`}
+            >
+              <!-- svelte-ignore a11y_click_events_have_key_events -->
+              <!-- svelte-ignore a11y_no_static_element_interactions -->
+              <div
+                class="ticket-header"
+                onclick={() => toggleTicket(ticket.id)}
+              >
+                <p><strong>{ticket.title}</strong></p>
+                <span>{isExpanded(ticket.id) ? "−" : "+"}</span>
+              </div>
+              <div class="ticket-details">
+                <p><strong>Vytvořeno:</strong> {ticket.createdAt}</p>
+                <p><strong>Status:</strong> {ticket.status}</p>
+                <p><strong>Kategorie:</strong> {ticket.category}</p>
+                <p><strong>Zpráva:</strong> {ticket.msg}</p>
+
+                {#if ticket.sender}
+                  <p>
+                    <strong>Odesílatel:</strong>
+                    {ticket.sender.firstName}
+                    {ticket.sender.lastName} ({ticket.sender.email})
+                  </p>
+                {/if}
+                {#if isAdmin}
+                  <div class="ticket-actions">
+                    <label>
+                      Změnit status:
+                      <select
+                        onchange={(event) =>
+                          updateTicketStatus(
+                            ticket.id,
+                            (event.target as HTMLSelectElement).value
+                          )}
+                        value={ticket.status}
+                      >
+                        <option value="Čekající">Čekající</option>
+                        <option value="Rozpracováno">Rozpracováno</option>
+                        <option value="Hotovo">Hotovo</option>
+                      </select>
+                    </label>
+                  </div>
+                {/if}
+              </div>
+            </div>
+          {/if}
         {/each}
       </section>
     {/if}
@@ -238,7 +286,7 @@
         </label>
         <label>
           Příjmení:
-          <input bind:value={lastName} type="text" />
+          <input bind:value={lastName} type="text" required />
         </label>
         <button type="submit">Uložit</button>
       </form>
@@ -365,6 +413,10 @@
     border-left: 6px solid #721c24;
   }
 
+  .Filtr-state, #filter{
+    margin-bottom: 10px;
+  } 
+
   .ticket .ticket-header {
     display: flex;
     justify-content: space-between;
@@ -391,8 +443,6 @@
     max-height: none;
     overflow: visible;
   }
-
-  h1,
   h2 {
     font-size: 2rem;
     color: #fff;
@@ -420,7 +470,7 @@
     margin-bottom: 30px;
   }
 
-  .admin-profile {
+  section.is-admin {
     border: 2px dashed #28a745;
   }
 
@@ -498,7 +548,6 @@
   }
 
   @media (max-width: 480px) {
-    h1,
     h2 {
       font-size: 1.5rem;
     }
