@@ -10,7 +10,6 @@
   let successMessage = $state("");
   let passwordVisible = $state(false);
   let confirmPasswordVisible = $state(false);
-  let agreedToTerms = $state(false);
 
   function validateForm() {
     if (!name || !surname || !email || !password || !confirmPassword) {
@@ -23,10 +22,6 @@
     }
     if (password !== confirmPassword) {
       errorMessage = "Hesla se neshodují.";
-      return false;
-    }
-    if (!agreedToTerms) {
-      errorMessage = "Musíte souhlasit s podmínkami.";
       return false;
     }
     errorMessage = "";
